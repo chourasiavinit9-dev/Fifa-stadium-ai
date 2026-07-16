@@ -1,0 +1,6 @@
+{
+  "name": "AEGIS // AI Stadium OS",
+  "description": "A futuristic Generative AI Operating System and Interactive Digital Twin for FIFA World Cup 2026 Smart Stadiums, controlling crowd management, emergency evacuation, sustainability, and transport systems.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
