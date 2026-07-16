@@ -51,8 +51,8 @@ export function checkRateLimit(
 }
 
 export const RATE_LIMITS = {
-  "/api/worldcup": 60,
-  "/api/gemini": 20,
-  "/api/gemini-ops": 30,
-  "/api/anomaly": 10,
+  "/api/worldcup": 300, // raised — static data, no quota cost
+  "/api/gemini": 40,
+  "/api/gemini-ops": 60,
+  "/api/anomaly": 30,
 } as const;

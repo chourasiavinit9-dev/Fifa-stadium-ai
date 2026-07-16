@@ -225,10 +225,11 @@ export function buildFanSystemPrompt(context: {
       ? context.liveMatches
           .map((m) => `🔴 LIVE: ${m.team1} vs ${m.team2} @ ${m.ground}`)
           .join("; ")
-      : `🔴 LIVE RIGHT NOW: England 1-0 Argentina (2nd half, Mercedes-Benz Stadium Atlanta). Anthony Gordon scored in 57th minute. Morgan Rogers assist.`;
+      : `✅ SEMI-FINALS COMPLETED: England 1-2 Argentina (Mercedes-Benz Stadium, Atlanta, Jul 15 — Gordon 55' | Fernández 86', Martínez 92'). NO MATCHES LIVE RIGHT NOW.`;
 
-  const sf1Result = `✅ YESTERDAY: Spain 2-0 France (Oyarzabal 22'pen, Porro 58') — Spain in the Final.`;
-  const finalInfo = `🏆 FINAL: July 19, 15:00 ET — MetLife Stadium NJ — Spain vs [England/Argentina winner today].`;
+  const sf1Result = `✅ SEMI-FINAL 1 (Jul 14): Spain 2-0 France (AT&T Stadium, Dallas — Oyarzabal 22'pen, Porro 58'). Spain qualified for Final.`;
+  const finalInfo = `📅 UPCOMING: Third Place Match Jul 18 @ 15:00 ET — France vs England (Hard Rock Stadium, Miami). 🏆 FINAL Jul 19 @ 15:00 ET — Spain vs Argentina (MetLife Stadium, East Rutherford NJ).`;
+
 
   const todayStr =
     context.todaysMatches.length > 0
@@ -407,48 +408,49 @@ export function getSyntheticFifaIqResponse(
   const q = query.toLowerCase();
 
   // Spanish queries
-  if (q.includes("salida") || q.includes("puerta") || q.includes("dónde") || q.includes("estacionamiento")) {
-    return `🚪 Salidas y Evacuación — MetLife Stadium (NY/NJ):\n\n• Salidas principales / Main Exits: Gate A (Norte), Gate B (Noreste), Gate C (Este), y Gate D (Sureste).\n• Rampas accesibles / Accessible Ramps: Todas las 8 puertas tienen rampas compatibles con ADA; Gate D tiene la rampa más ancha.\n• En caso de emergencia: Siga las luces de señalización verde neón (#7CFF2A) hacia la puerta abierta más cercana. Tiempo promedio de evacuación actual: <8 minutos.`;
+  if (q.includes("salida") || q.includes("puerta") || q.includes("d\u00f3nde") || q.includes("estacionamiento")) {
+    return `\uD83D\uDEAA Salidas y Evacuaci\u00f3n \u2014 MetLife Stadium (NY/NJ):\n\n\u2022 Salidas principales / Main Exits: Gate A (Norte), Gate B (Noreste), Gate C (Este), y Gate D (Sureste).\n\u2022 Rampas accesibles / Accessible Ramps: Todas las 8 puertas tienen rampas compatibles con ADA; Gate D tiene la rampa m\u00e1s ancha.\n\u2022 En caso de emergencia: Siga las luces de se\u00f1alizaci\u00f3n verde ne\u00f3n (#7CFF2A) hacia la puerta abierta m\u00e1s cercana. Tiempo promedio de evacuaci\u00f3n actual: <8 minutos.`;
   }
   if (q.includes("goles") || q.includes("partidos") || q.includes("calendario") || q.includes("goleadores")) {
-    return `🏆 FIFA World Cup 2026 — Estado del Torneo (En Vivo):\n\n🔴 EN VIVO: England 1-2 Argentina (Semifinales @ Mercedes-Benz Stadium, Atlanta)\n• Anthony Gordon 55' | Enzo Fernández 86', Lautaro Martínez 92'\n\n✅ AYER: Spain 2-0 France (Oyarzabal 22'pen, Porro 58')\n\n🏆 GRAN FINAL: 19 de Julio @ 15:00 ET — MetLife Stadium, NJ: Spain vs Argentina\n⚽ Goleadores: Bellingham (6), Mbappé (6), Kane (5), Yamal (5), Messi (4).`;
+    return `\uD83C\uDFC6 FIFA World Cup 2026 \u2014 Resultados del Torneo:\n\n\u2705 SEMIFINAL 1 (Completada):\nSpain 2\u20130 France (AT&T Stadium, Dallas)\n\u2022 Mikel Oyarzabal 22' (pen), Pedro Porro 58'\n\n\u2705 SEMIFINAL 2 (Completada):\nEngland 1\u20132 Argentina (Mercedes-Benz Stadium, Atlanta)\n\u2022 Anthony Gordon 55' | Enzo Fern\u00e1ndez 86', Lautaro Mart\u00ednez 92'\n\n\uD83D\uDCC5 TERCER LUGAR: 18 Jul @ 15:00 ET \u2014 France vs England (Hard Rock Stadium, Miami)\n\uD83C\uDFC6 GRAN FINAL: 19 Jul @ 15:00 ET \u2014 Spain vs Argentina (MetLife Stadium, NJ)\n\u26BD Goleadores: Bellingham (6), Mbapp\u00e9 (6), Kane (5), Yamal (5), Messi (4).`;
   }
 
   // Japanese queries
-  if (q.includes("ゴール") || q.includes("試合") || q.includes("最近")) {
-    return `🏆 FIFAワールドカップ2026 — 最新スコア＆速報:\n\n🔴 ライブ中継: イングランド 1-2 アルゼンチン (準決勝 @ アトランタ)\n• 得点者: A.ゴードン 55' | E.フェルナンデス 86', L.マルティネス 92'\n\n✅ 昨日の結果: スペイン 2-0 フランス (オヤルサバル 22'PK, ポロ 58')\n\n🏆 決勝戦 (Final): 7月19日 15:00 ET — メットライフ・スタジアム (NJ): スペイン vs アルゼンチン\n⚽ 得点ランキング: ベリンガム (6点), ムバッペ (6点), ケイン (5点), ヤマル (5点), メッシ (4点)。`;
+  if (q.includes("\u30B4\u30FC\u30EB") || q.includes("\u8A66\u5408") || q.includes("\u6700\u8FD1")) {
+    return `\uD83C\uDFC6 FIFA\u30EF\u30FC\u30EB\u30C9\u30AB\u30C3\u30D72026 \u2014 \u6700\u65B0\u30B9\u30B3\u30A2\uff06\u901F\u5831:\n\n\u2705 \u6E96\u6C7A\u52DD1 (\u5B8C\u4E86): \u30B9\u30DA\u30A4\u30F3 2\u20130 \u30D5\u30E9\u30F3\u30B9 (AT&T\u30B9\u30BF\u30B8\u30A2\u30E0, \u30C0\u30E9\u30B9)\n\u2022 \u5F97\u70B9\u8005: \u30AA\u30E4\u30EB\u30B5\u30D0\u30EB 22'PK, \u30DD\u30ED 58'\n\n\u2705 \u6E96\u6C7A\u52DD2 (\u5B8C\u4E86): \u30A4\u30F3\u30B0\u30E9\u30F3\u30C9 1\u20132 \u30A2\u30EB\u30BC\u30F3\u30C1\u30F3 (\u30A2\u30C8\u30E9\u30F3\u30BF)\n\u2022 \u5F97\u70B9\u8005: A.\u30B4\u30FC\u30C9\u30F3 55' | E.\u30D5\u30A7\u30EB\u30CA\u30F3\u30C7\u30B9 86', L.\u30DE\u30EB\u30C6\u30A3\u30CD\u30B9 92'\n\n\uD83D\uDCC5 3\u4F4D\u6C7A\u5B9A\u6226: 7\u670818\u65E5 15:00 ET \u2014 \u30D5\u30E9\u30F3\u30B9 vs \u30A4\u30F3\u30B0\u30E9\u30F3\u30C9\n\uD83C\uDFC6 \u6C7A\u52DD\u6226 (Final): 7\u670819\u65E5 15:00 ET \u2014 \u30B9\u30DA\u30A4\u30F3 vs \u30A2\u30EB\u30BC\u30F3\u30C1\u30F3 (\u30E1\u30C3\u30C8\u30E9\u30A4\u30D5\u30FB\u30B9\u30BF\u30B8\u30A2\u30E0, NJ)\n\u26BD \u5F97\u70B9\u30E9\u30F3\u30AD\u30F3\u30B0: \u30D9\u30EA\u30F3\u30AC\u30E0 (6\u70B9), \u30E0\u30D0\u30C3\u30DA (6\u70B9), \u30B1\u30A4\u30F3 (5\u70B9), \u30E4\u30DE\u30EB (5\u70B9), \u30E1\u30C3\u30B7 (4\u70B9)\u3002`;
   }
 
   // Scores & Quick Stats
-  if (q.includes("score") || q.includes("result") || q.includes("today") || q.includes("live") || q.includes("match")) {
-    return `🏆 FIFA World Cup 2026 — Live & Recent Scores:\n\n🔴 LIVE RIGHT NOW: England 1-2 Argentina (Semi-Finals @ Mercedes-Benz Stadium, Atlanta)\n• Anthony Gordon 55' | Enzo Fernández 86', Lautaro Martínez 92'\n\n✅ YESTERDAY: Spain 2-0 France (Semi-Finals @ AT&T Stadium, Dallas)\n• Mikel Oyarzabal 22' (pen), Pedro Porro 58'\n\n📅 UPCOMING FINAL:\n• July 19 @ 15:00 ET — MetLife Stadium, NJ: Spain vs Argentina`;
+  if (q.includes("score") || q.includes("result") || q.includes("today") || q.includes("live") || q.includes("match") || q.includes("latest") || q.includes("last")) {
+    return `\uD83C\uDFC6 FIFA World Cup 2026 \u2014 Latest Results & Upcoming Fixtures:\n\n\u2705 SEMI-FINAL 2 (Completed \u2014 Jul 15):\nEngland 1\u20132 Argentina @ Mercedes-Benz Stadium, Atlanta\n\u2022 Gordon 55' | Fern\u00e1ndez 86', Mart\u00ednez 92'\n\n\u2705 SEMI-FINAL 1 (Completed \u2014 Jul 14):\nSpain 2\u20130 France @ AT&T Stadium, Dallas\n\u2022 Oyarzabal 22' (pen), Porro 58'\n\n\uD83D\uDCC5 THIRD PLACE MATCH (Jul 18 @ 15:00 ET):\nFrance vs England \u2014 Hard Rock Stadium, Miami FL\n\n\uD83C\uDFC6 FINAL (Jul 19 @ 15:00 ET):\nSpain vs Argentina \u2014 MetLife Stadium, East Rutherford NJ`;
   }
 
   // Gates & Crowd
   if (q.includes("gate") || q.includes("crowd") || q.includes("least") || q.includes("queue") || q.includes("entry") || q.includes("exit")) {
-    return `🚪 Live Crowd Telemetry & Gate Recommendations:\n\n✨ RECOMMENDED GATE: Gate H (Northwest Corner @ MetLife Stadium)\n• Current Queue Wait: ~2 minutes (Lowest density: 34% capacity)\n• Proximity: 0.3 miles from Parking Lot A & North Pedestrian Plaza.\n\n⚠️ HEAVY FLOW WARNING: Gate C (East Side) is experiencing 78% density (~18 min wait). Avoid Gate C and proceed to Gate H or Gate A for express entry.`;
+    return `\uD83D\uDEAA Live Crowd Telemetry & Gate Recommendations:\n\n\u2728 RECOMMENDED GATE: Gate H (Northwest Corner @ MetLife Stadium)\n\u2022 Current Queue Wait: ~2 minutes (Lowest density: 34% capacity)\n\u2022 Proximity: 0.3 miles from Parking Lot A & North Pedestrian Plaza.\n\n\u26A0\uFE0F HEAVY FLOW WARNING: Gate C (East Side) is experiencing 78% density (~18 min wait). Avoid Gate C and proceed to Gate H or Gate A for express entry.`;
   }
 
   // Schedule
-  if (q.includes("schedule") || q.includes("semi") || q.includes("when") || q.includes("final") || q.includes("bracket")) {
-    return `📅 FIFA World Cup 2026 — Knockout Stage Schedule:\n\n🔹 Semi-Final 1 (Completed):\n• Spain 2-0 France (AT&T Stadium, Dallas TX)\n\n🔹 Semi-Final 2 (Live / Today):\n• England 1-2 Argentina — Mercedes-Benz Stadium, Atlanta GA\n\n🔹 Third Place Match:\n• July 18 @ 15:00 UTC-5 — France vs England (Hard Rock Stadium, Miami FL)\n\n🏆 Championship Final:\n• July 19 @ 15:00 UTC-5 — Spain vs Argentina (MetLife Stadium, East Rutherford NJ)`;
+  if (q.includes("schedule") || q.includes("semi") || q.includes("when") || q.includes("final") || q.includes("bracket") || q.includes("upcoming")) {
+    return `\uD83D\uDCC5 FIFA World Cup 2026 \u2014 Remaining Schedule:\n\n\u2705 Semi-Final 1 (Completed \u2014 Jul 14):\nSpain 2\u20130 France (AT&T Stadium, Dallas TX)\n\n\u2705 Semi-Final 2 (Completed \u2014 Jul 15):\nEngland 1\u20132 Argentina (Mercedes-Benz Stadium, Atlanta GA)\n\n\uD83D\uDD38 Third Place Match (Jul 18 @ 15:00 ET):\nFrance vs England \u2014 Hard Rock Stadium, Miami FL\n\n\uD83C\uDFC6 Championship Final (Jul 19 @ 15:00 ET):\nSpain vs Argentina \u2014 MetLife Stadium, East Rutherford NJ`;
   }
 
   // Goalscorers
-  if (q.includes("goalscorer") || q.includes("scorer") || q.includes("bellingham") || q.includes("mbappe") || q.includes("kane") || q.includes("yamal") || q.includes("messi") || q.includes("top")) {
-    return `⚽ Golden Boot Leaderboard (Top Goalscorers):\n\n1️⃣ Jude Bellingham (England) — 6 goals (2 in QF vs Norway, 2 in R16 vs Mexico)\n2️⃣ Kylian Mbappé (France) — 6 goals (1 in R16, 2 in QF, 2 in R32)\n3️⃣ Harry Kane (England) — 5 goals (1 in R16, 2 in R32)\n4️⃣ Lamine Yamal (Spain) — 5 goals\n5️⃣ Lionel Messi (Argentina) — 4 goals\n6️⃣ Mikel Oyarzabal (Spain) — 4 goals (including Semi-Final winner)`;
+  if (q.includes("goalscorer") || q.includes("scorer") || q.includes("bellingham") || q.includes("mbappe") || q.includes("kane") || q.includes("yamal") || q.includes("messi") || q.includes("top") || q.includes("golden boot")) {
+    return `\u26BD Golden Boot Leaderboard (Top Goalscorers):\n\n1\uFE0F\u20E3 Jude Bellingham (England) \u2014 6 goals (2 in QF vs Norway, 2 in R16 vs Mexico)\n2\uFE0F\u20E3 Kylian Mbapp\u00e9 (France) \u2014 6 goals (1 in R16, 2 in QF, 2 in R32)\n3\uFE0F\u20E3 Harry Kane (England) \u2014 5 goals (1 in R16, 2 in R32)\n4\uFE0F\u20E3 Lamine Yamal (Spain) \u2014 5 goals\n5\uFE0F\u20E3 Lionel Messi (Argentina) \u2014 4 goals\n6\uFE0F\u20E3 Mikel Oyarzabal (Spain) \u2014 4 goals (including Semi-Final winner)`;
   }
 
   // Food & Dining
   if (q.includes("food") || q.includes("nearest") || q.includes("burger") || q.includes("beer") || q.includes("drink") || q.includes("concourse") || q.includes("snack") || q.includes("eat")) {
-    return `🍔 Stadium Concourse & Dining Directory (MetLife Stadium):\n\n• Concourse A (near Gates A-B): Hot dogs, smashed burgers, loaded nachos, and craft beer.\n• Concourse B (near Gates C-D): Artisanal wood-fired pizza, chicken wraps, and plant-based Beyond Burgers.\n• Concourse C (near Gates G-H): Express grab-and-go snacks, hot pretzels, ice-cold drinks, and coffee.\n\n💡 Eco Tip: Bring your own reusable cup to enjoy $2 refills at any water or fountain station!`;
+    return `\uD83C\uDF54 Stadium Concourse & Dining Directory (MetLife Stadium):\n\n\u2022 Concourse A (near Gates A-B): Hot dogs, smashed burgers, loaded nachos, and craft beer.\n\u2022 Concourse B (near Gates C-D): Artisanal wood-fired pizza, chicken wraps, and plant-based Beyond Burgers.\n\u2022 Concourse C (near Gates G-H): Express grab-and-go snacks, hot pretzels, ice-cold drinks, and coffee.\n\n\uD83D\uDCA1 Eco Tip: Bring your own reusable cup to enjoy $2 refills at any water or fountain station!`;
   }
 
   // Transport & Parking
   if (q.includes("transport") || q.includes("shuttle") || q.includes("train") || q.includes("metro") || q.includes("parking") || q.includes("bus") || q.includes("car")) {
-    return `🚌 Official Matchday Transit & Parking Guide (MetLife Stadium, NJ):\n\n🚅 Rail (Recommended): Take the NJ Transit Meadowlands Express train from Secaucus Junction. Trains depart every 15 minutes right to the stadium station (0.4 mi express walk to Gate A).\n\n🚌 Express Bus: Port Authority Bus 355 drops fans directly at Gate G.\n\n🚗 Parking Lots: Lot A (0.3 mi to Gate H — closest general lot), Lot B (0.3 mi to Gate C), Lot C (0.6 mi to Gate D). Pre-booked digital passes required for all vehicles.`;
+    return `\uD83D\uDE8C Official Matchday Transit & Parking Guide (MetLife Stadium, NJ):\n\n\uD83D\uDE85 Rail (Recommended): Take the NJ Transit Meadowlands Express train from Secaucus Junction. Trains depart every 15 minutes right to the stadium station (0.4 mi express walk to Gate A).\n\n\uD83D\uDE8C Express Bus: Port Authority Bus 355 drops fans directly at Gate G.\n\n\uD83D\uDE97 Parking Lots: Lot A (0.3 mi to Gate H \u2014 closest general lot), Lot B (0.3 mi to Gate C), Lot C (0.6 mi to Gate D). Pre-booked digital passes required for all vehicles.`;
   }
 
   // Default rich tournament overview
-  return `🏆 FIFAiq Smart Assistant — Tournament & Venue Status:\n\n• Current Round: Semi-Finals (Total Goals Scored: ${context?.totalGoals ?? 184})\n• Featured Venue: MetLife Stadium, NY/NJ (Capacity: 82,500 | Current Occupancy: 78,120)\n• Security Status: ELEVATED (Level 2) — All 8 gates operational.\n• Live Matchup: England 1-2 Argentina (Semi-Finals @ Mercedes-Benz Stadium).\n\nAsk me about live scores, Gate recommendations, Concourse dining, or stadium transit!`;
+  return `\uD83C\uDFC6 FIFAiq Smart Assistant \u2014 Tournament & Venue Status:\n\n\u2022 Current Stage: Final (Jul 19) & Third Place (Jul 18) remain.\n\u2022 Finalists: Spain vs Argentina (MetLife Stadium, NJ)\n\u2022 Semi-Final Results: Spain 2\u20130 France | England 1\u20132 Argentina\n\u2022 Total Goals Scored: ${context?.totalGoals ?? 184}\n\u2022 Featured Venue: MetLife Stadium, NY/NJ (Capacity: 82,500)\n\u2022 Security Status: ELEVATED (Level 2) \u2014 All 8 gates operational.\n\nAsk me about: Live scores \u26BD | Gate recommendations \uD83D\uDEAA | Dining \uD83C\uDF54 | Stadium transit \uD83D\uDE8C`;
 }
+
