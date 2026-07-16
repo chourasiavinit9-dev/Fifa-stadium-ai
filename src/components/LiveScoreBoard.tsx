@@ -10,7 +10,7 @@ interface LiveEvent {
   detail?: string;
 }
 
-// Real events from England vs Argentina Semi-Final
+// Real events from England vs Argentina Semi-Final — COMPLETED (FT)
 const LIVE_MATCH = {
   home: "England",
   homeFlag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
@@ -18,16 +18,21 @@ const LIVE_MATCH = {
   awayFlag: "🇦🇷",
   venue: "Mercedes-Benz Stadium, Atlanta",
   kickoff: new Date("2026-07-15T19:00:00Z"), // 15:00 ET = 19:00 UTC
-  score: { home: 1, away: 0 },
+  score: { home: 1, away: 2 },
   events: [
     { minute: 8, type: "yellow", team: "away", player: "C. Romero", detail: "Foul on Bellingham" },
     { minute: 23, type: "var", team: "home", player: "VAR Review", detail: "Penalty checked — no award" },
     { minute: 38, type: "yellow", team: "away", player: "L. Martínez", detail: "Pulling Rashford" },
     { minute: 45, type: "sub", team: "home", player: "Rashford → Gordon", detail: "Half-time change" },
-    { minute: 57, type: "goal", team: "home", player: "A. Gordon", detail: "Morgan Rogers assist — 1-0!" },
+    { minute: 55, type: "goal", team: "home", player: "A. Gordon", detail: "Morgan Rogers assist — England 1-0!" },
     { minute: 63, type: "sub", team: "away", player: "Paredes → González", detail: "Argentina push forward" },
+    { minute: 74, type: "yellow", team: "home", player: "J. Bellingham", detail: "Tactical foul" },
+    { minute: 86, type: "goal", team: "away", player: "E. Fernández", detail: "Stunning long-range strike — 1-1!" },
+    { minute: 90, type: "sub", team: "home", player: "Saka → Trossard", detail: "England chase the win" },
+    { minute: 92, type: "goal", team: "away", player: "L. Martínez", detail: "Header from Messi cross — Argentina WIN 1-2!" },
   ] as LiveEvent[],
 };
+
 
 const EVENT_ICONS: Record<LiveEvent["type"], string> = {
   goal: "⚽",
@@ -47,9 +52,9 @@ const EVENT_COLORS: Record<LiveEvent["type"], string> = {
 
 export default function LiveScoreBoard() {
   const { kickoff } = LIVE_MATCH;
-  const [matchMinute, setMatchMinute] = useState(0);
-  const [visibleEvents, setVisibleEvents] = useState<LiveEvent[]>([]);
-  const [status, setStatus] = useState<"pre" | "live" | "ht" | "ft">("live");
+  const [matchMinute, setMatchMinute] = useState(92);
+  const [visibleEvents, setVisibleEvents] = useState<LiveEvent[]>(LIVE_MATCH.events);
+  const [status, setStatus] = useState<"pre" | "live" | "ht" | "ft">("ft");
   const feedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -93,7 +98,7 @@ export default function LiveScoreBoard() {
           aria-hidden="true"
         />
         <span className="text-[10px] text-[#ff3b3b] font-mono font-semibold tracking-[0.2em] uppercase">
-          Semi-Final · Live · {matchMinute}&apos;
+          Semi-Final · FULL TIME · Jul 15
         </span>
         <span className="ml-auto text-[10px] text-[#3a5a3a] font-mono">
           {LIVE_MATCH.venue}
@@ -182,7 +187,7 @@ export default function LiveScoreBoard() {
 
       {/* Footer */}
       <div className="mt-3 px-2.5 py-1.5 bg-[#0f172a] rounded-lg text-[11px] text-[#3a5a3a] text-center">
-        Winner faces 🇪🇸 Spain in the Final · July 19, 15:00 ET · MetLife Stadium NJ
+        🇦🇷 Argentina advance to the Final · July 19, 15:00 ET · MetLife Stadium NJ · vs 🇪🇸 Spain
       </div>
     </div>
   );

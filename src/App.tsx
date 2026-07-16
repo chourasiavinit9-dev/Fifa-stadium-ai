@@ -247,8 +247,8 @@ export default function App() {
                   <Cpu className="w-7 h-7 text-black" />
                 </div>
                 <div className="text-left">
-                  <div className="text-3xl font-black font-['Space_Grotesk',sans-serif] text-[#7CFF2A] tracking-tight">AEGIS</div>
-                  <div className="text-[10px] font-mono text-[#7CFF2A]/40 tracking-[0.3em] uppercase">Mission Control</div>
+                  <div className="text-3xl font-black font-['Space_Grotesk',sans-serif] text-[#7CFF2A] tracking-tight">FIFAiq</div>
+                  <div className="text-[10px] font-mono text-[#7CFF2A]/40 tracking-[0.3em] uppercase">Command Center</div>
                 </div>
               </motion.div>
 
@@ -338,7 +338,7 @@ export default function App() {
                 </div>
                 <div>
                   <h1 className="text-xl font-bold font-mono tracking-wider text-[#F2FAFF] uppercase">
-                    AEGIS <span className="text-[#6FD3FF] font-sans font-light">//</span> MISSION CONTROL
+                    FIFAiq <span className="text-[#6FD3FF] font-sans font-light">//</span> COMMAND CENTER
                   </h1>
                   <p className="text-[10px] uppercase font-mono tracking-widest text-[#8EA4B5]">
                     FIFA World Cup 2026 AI Venue Operating System
@@ -551,9 +551,9 @@ export default function App() {
                 <div className="space-y-4">
                   <h2 className="text-sm uppercase font-mono tracking-widest text-[#8EA4B5] flex items-center">
                     <Compass className="w-4 h-4 mr-2 text-[#6FD3FF]" />
-                    AEGIS Crowd Operations OS
+                    FIFAiq Crowd Operations
                   </h2>
-                  <ErrorBoundary componentName="AEGIS Operations" fallback="Operations panel temporarily unavailable">
+                  <ErrorBoundary componentName="FIFAiq Operations" fallback="Operations panel temporarily unavailable">
                     <AegisStadiumOS
                       onSectorDensitiesChange={setSectorDensities}
                       onIncidentCountChange={(n) => setTelemetry((p) => ({ ...p, activeIncidentsCount: n }))}
@@ -658,7 +658,7 @@ export default function App() {
       {/* FOOTER COORD STAMP */}
       {!booting && (
         <footer className="w-full text-center text-[10px] font-mono text-[#8EA4B5]/40 mt-12 border-t border-white/[0.03] pt-6 flex flex-col items-center justify-center space-y-1">
-          <div>AEGIS // STADIUM OS • SECURE CORE CONSOLE • FIFA WORLD CUP 2026 OFFICIAL VENUE CONTROLLER</div>
+          <div>FIFAiq // SMART STADIUM OS • SECURE CORE CONSOLE • FIFA WORLD CUP 2026 OFFICIAL VENUE CONTROLLER</div>
           <div>CRAFTED BY GOOGLE AI STUDIO CHASSIS FOR TOURNAMENT OPERATIONS INTELLIGENCE</div>
         </footer>
       )}

@@ -321,7 +321,7 @@ export default function AegisStadiumOS({ onSectorDensitiesChange, onIncidentCoun
             <svg viewBox="0 0 320 320" style={{ width: "100%" }} role="img" aria-label="Stadium sector density donut map">
               {/* Core circle */}
               <circle cx={cx} cy={cy} r={innerR - 4} fill="#020617" stroke="#0f2a1a" strokeWidth={1} />
-              <text x={cx} y={cy - 8} textAnchor="middle" fontSize={9} fill="#4c5f57" fontFamily="monospace">AEGIS OS</text>
+              <text x={cx} y={cy - 8} textAnchor="middle" fontSize={9} fill="#4c5f57" fontFamily="monospace">FIFAiq</text>
               <text x={cx} y={cy + 6} textAnchor="middle" fontSize={10} fill="#00ff9d" fontFamily="monospace" fontWeight="bold">LIVE</text>
               <text x={cx} y={cy + 20} textAnchor="middle" fontSize={8} fill="#4c5f57" fontFamily="monospace">v4.1</text>
 
