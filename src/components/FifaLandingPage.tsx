@@ -105,16 +105,63 @@ function densityLabel(d: number): "LOW" | "MED" | "HIGH" {
 }
 
 // ── Feature cards data ────────────────────────────────────────────────────────
-const FEATURES = [
-  { icon: <Navigation className="w-5 h-5" />, title: "Live Navigation", desc: "Sector-by-sector wayfinding with real-time congestion and fastest-entry routing.", color: "#7CFF2A" },
-  { icon: <Users className="w-5 h-5" />, title: "Crowd Intelligence", desc: "10-sector density monitoring with CCTV overlays and AI-powered anomaly detection.", color: "#5DBBFF" },
-  { icon: <Shield className="w-5 h-5" />, title: "Accessibility First", desc: "Full keyboard support, live regions, and text-paired status for every indicator.", color: "#7CFF2A" },
-  { icon: <Car className="w-5 h-5" />, title: "Transport Hub", desc: "Shuttles, metro crowding and parking availability, updated in real time.", color: "#F5A623" },
-  { icon: <Leaf className="w-5 h-5" />, title: "Sustainability", desc: "Live energy mix, waste diversion and water-savings for the match day.", color: "#7CFF2A" },
-  { icon: <Wifi className="w-5 h-5" />, title: "Multilingual AI", desc: "Fan assistant that detects language and responds in kind, across ten languages.", color: "#5DBBFF" },
-  { icon: <BarChart2 className="w-5 h-5" />, title: "Analytics Engine", desc: "Tournament-wide statistics, heatmaps, and predictive crowd flow modeling.", color: "#F5A623" },
-  { icon: <AlertTriangle className="w-5 h-5" />, title: "Emergency Ops", desc: "Instant evacuation routing with dynamic signage override and audio beacons.", color: "#FF3B3B" },
-  { icon: <Eye className="w-5 h-5" />, title: "CCTV AI Vision", desc: "Computer vision analysis across 180 cameras with instant anomaly flagging.", color: "#7CFF2A" },
+type FeatureAction =
+  | { kind: "scroll"; target: string }
+  | { kind: "console" };
+
+const FEATURES: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+  color: string;
+  action: FeatureAction;
+  actionLabel: string;
+}[] = [
+  {
+    icon: <Navigation className="w-5 h-5" />, title: "Live Navigation",
+    desc: "Sector-by-sector wayfinding with real-time congestion and fastest-entry routing.",
+    color: "#7CFF2A", action: { kind: "scroll", target: "#map" }, actionLabel: "Open stadium map",
+  },
+  {
+    icon: <Users className="w-5 h-5" />, title: "Crowd Intelligence",
+    desc: "10-sector density monitoring with CCTV overlays and AI-powered anomaly detection.",
+    color: "#5DBBFF", action: { kind: "scroll", target: "#map" }, actionLabel: "View crowd density map",
+  },
+  {
+    icon: <Shield className="w-5 h-5" />, title: "Accessibility First",
+    desc: "Full keyboard support, live regions, and text-paired status for every indicator.",
+    color: "#7CFF2A", action: { kind: "scroll", target: "#map" }, actionLabel: "Explore accessibility features",
+  },
+  {
+    icon: <Car className="w-5 h-5" />, title: "Transport Hub",
+    desc: "Shuttles, metro crowding and parking availability, updated in real time.",
+    color: "#F5A623", action: { kind: "scroll", target: "#transport" }, actionLabel: "Open transport hub",
+  },
+  {
+    icon: <Leaf className="w-5 h-5" />, title: "Sustainability",
+    desc: "Live energy mix, waste diversion and water-savings for the match day.",
+    color: "#7CFF2A", action: { kind: "scroll", target: "#sustain" }, actionLabel: "View sustainability metrics",
+  },
+  {
+    icon: <Wifi className="w-5 h-5" />, title: "Multilingual AI",
+    desc: "Fan assistant that detects language and responds in kind, across ten languages.",
+    color: "#5DBBFF", action: { kind: "scroll", target: "#ops" }, actionLabel: "Open AI fan assistant",
+  },
+  {
+    icon: <BarChart2 className="w-5 h-5" />, title: "Analytics Engine",
+    desc: "Tournament-wide statistics, heatmaps, and predictive crowd flow modeling.",
+    color: "#F5A623", action: { kind: "console" }, actionLabel: "Open analytics command center",
+  },
+  {
+    icon: <AlertTriangle className="w-5 h-5" />, title: "Emergency Ops",
+    desc: "Instant evacuation routing with dynamic signage override and audio beacons.",
+    color: "#FF3B3B", action: { kind: "console" }, actionLabel: "Open emergency operations",
+  },
+  {
+    icon: <Eye className="w-5 h-5" />, title: "CCTV AI Vision",
+    desc: "Computer vision analysis across 180 cameras with instant anomaly flagging.",
+    color: "#7CFF2A", action: { kind: "console" }, actionLabel: "Open CCTV command center",
+  },
 ];
 
 // ── Live stats for hero ───────────────────────────────────────────────────────
@@ -418,37 +465,54 @@ export default function FifaLandingPage({ onEnterConsole, telemetry, scenario, s
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURES.map((f, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.6, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                className="glass-card glass-card-hover p-6 group cursor-default"
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
-                  style={{
-                    background: `${f.color}14`,
-                    border: `1px solid ${f.color}30`,
-                    color: f.color,
-                    boxShadow: `0 0 20px ${f.color}10`,
-                  }}
+            {FEATURES.map((f, i) => {
+              const handleAction = () => {
+                if (f.action.kind === "scroll") {
+                  document.querySelector(f.action.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                } else {
+                  onEnterConsole();
+                }
+              };
+              return (
+                <motion.button
+                  key={i}
+                  type="button"
+                  aria-label={f.actionLabel}
+                  onClick={handleAction}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleAction(); } }}
+                  initial={{ opacity: 0, y: 32 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.6, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                  className="glass-card glass-card-hover p-6 group cursor-pointer text-left w-full focus:outline-none rounded-2xl transition-all"
+                  style={{ ["--focus-color" as string]: f.color } as React.CSSProperties}
+                  onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 2px ${f.color}80`; }}
+                  onBlur={(e) => { e.currentTarget.style.boxShadow = ""; }}
                 >
-                  {f.icon}
-                </div>
-                <h3 className="font-['Space_Grotesk',sans-serif] text-base font-semibold text-white mb-2">{f.title}</h3>
-                <p className="text-sm text-white/35 leading-relaxed">{f.desc}</p>
-                <div
-                  className="mt-5 flex items-center gap-1.5 text-[11px] font-mono opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ color: f.color }}
-                >
-                  <span>Explore</span>
-                  <ChevronRight className="w-3 h-3" />
-                </div>
-              </motion.div>
-            ))}
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
+                    style={{
+                      background: `${f.color}14`,
+                      border: `1px solid ${f.color}30`,
+                      color: f.color,
+                      boxShadow: `0 0 20px ${f.color}10`,
+                    }}
+                  >
+                    {f.icon}
+                  </div>
+                  <h3 className="font-['Space_Grotesk',sans-serif] text-base font-semibold text-white mb-2">{f.title}</h3>
+                  <p className="text-sm text-white/35 leading-relaxed">{f.desc}</p>
+                  <div
+                    className="mt-5 flex items-center gap-1.5 text-[11px] font-mono opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"
+                    style={{ color: f.color }}
+                    aria-hidden="true"
+                  >
+                    <span>Explore</span>
+                    <ChevronRight className="w-3 h-3" />
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         </section>
 
