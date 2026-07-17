@@ -22,7 +22,7 @@ import StadiumMap from "./components/StadiumMap";
 import LiveScoreBoard from "./components/LiveScoreBoard";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { TelemetryData, Gate, IncidentAlert, TwinLayer, OperationScenario } from "./types";
-import type { WorldCupData } from "./lib/worldcupApi";
+import type { WorldCupData } from "./lib/worldCupApi";
 
 export default function App() {
   const [booting, setBooting] = useState(true);
@@ -38,16 +38,19 @@ export default function App() {
   const [sectorDensities, setSectorDensities] = useState<Record<string, number>>({});
   const [dashboardTab, setDashboardTab] = useState<"twin" | "aegis" | "cctv" | "analytics" | "map">("aegis");
 
-  // Fetch World Cup data for dashboard analytics
+  // Fetch World Cup data — load immediately then poll every 60s
   React.useEffect(() => {
     const load = async () => {
       try {
         const res = await fetch("/api/worldcup");
         if (res.ok) setWcData(await res.json());
-      } catch { /* silently ignore */ }
+      } catch { /* silently ignore — curated fallback data shown */ }
     };
-    if (currentMode === "ops") load();
-  }, [currentMode]);
+    load(); // fetch on mount immediately
+    const poll = setInterval(load, 60_000);
+    return () => clearInterval(poll);
+  }, []);
+
 
   // Live ticking Telemetry Data
   const [telemetry, setTelemetry] = useState<TelemetryData>({
@@ -329,7 +332,16 @@ export default function App() {
             transition={{ duration: 0.6 }}
             className="w-full max-w-7xl mx-auto px-4 md:px-6 pt-4 space-y-6 relative"
           >
-            
+            <div style={{
+              background: 'rgba(200,255,0,0.08)',
+              border: '1px solid rgba(200,255,0,0.3)',
+              borderRadius: 8, padding: '8px 16px',
+              fontSize: 12, color: '#c8ff00',
+              display: 'flex', alignItems: 'center', gap: 8
+            }}>
+              🏆 FINAL · Spain 🇪🇸 vs Argentina 🇦🇷 · Jul 19 · 15:00 ET · MetLife Stadium NJ
+            </div>
+
             {/* HUD HEADER PANEL */}
             <header id="aegis-header" className="w-full bg-[#0F1722]/80 border border-white/5 rounded-xl px-6 py-4 backdrop-blur-md flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl">
               <div className="flex items-center space-x-3 text-center md:text-left">

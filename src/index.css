@@ -322,3 +322,17 @@
   50% { box-shadow: 0 0 0 6px rgba(124,255,42,0); }
 }
 .live-dot { animation: live-pulse 1.5s ease-in-out infinite; }
+
+/* Winning score — Argentina's 2 */
+.score-winner {
+  font-size: 52px;
+  color: #c8ff00;  /* brighter green */
+  font-weight: 900;
+}
+/* Losing score — England's 1 */
+.score-loser {
+  font-size: 44px;
+  color: #6b7280;  /* muted gray */
+  font-weight: 700;
+}
+

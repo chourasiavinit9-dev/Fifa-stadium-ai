@@ -7,8 +7,8 @@ import {
   formatMatchDate,
   getTodaysMatches,
   getCompletedMatches,
-} from "../../src/lib/worldcupApi";
-import type { Match, WorldCupData } from "../../src/lib/worldcupApi";
+} from "../../src/lib/worldCupApi";
+import type { Match, WorldCupData } from "../../src/lib/worldCupApi";
 
 const completedMatch: Match = {
   round: "Quarter-Finals",

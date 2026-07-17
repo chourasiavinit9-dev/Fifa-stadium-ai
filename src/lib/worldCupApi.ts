@@ -1,4 +1,4 @@
-// src/lib/worldcupApi.ts
+// src/lib/worldCupApi.ts
 
 export interface Goal {
   name: string;

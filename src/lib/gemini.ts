@@ -1,6 +1,6 @@
 // src/lib/gemini.ts
 import { GoogleGenAI } from "@google/genai";
-import type { Match } from "./worldcupApi";
+import type { Match } from "./worldCupApi";
 
 let _ai: GoogleGenAI | null = null;
 

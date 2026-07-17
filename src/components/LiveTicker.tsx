@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { getFlag } from "../lib/flagLookup";
-import type { Match, WorldCupData } from "../lib/worldcupApi";
-import { matchStatus, formatMatchDate } from "../lib/worldcupApi";
+import type { Match, WorldCupData } from "../lib/worldCupApi";
+import { matchStatus, formatMatchDate } from "../lib/worldCupApi";
 
 interface TickerItem {
   id: string;

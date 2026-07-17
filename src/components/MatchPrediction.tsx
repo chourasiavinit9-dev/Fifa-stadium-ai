@@ -1,7 +1,7 @@
 // src/components/MatchPrediction.tsx
 "use client";
 import { useState, useEffect, useRef } from "react";
-import type { Match } from "../lib/worldcupApi";
+import type { Match } from "../lib/worldCupApi";
 
 interface Prediction {
   winner: string;

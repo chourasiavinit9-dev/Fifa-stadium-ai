@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { getFlag } from "../lib/flagLookup";
-import { matchStatus, formatMatchDate } from "../lib/worldcupApi";
-import type { Match, WorldCupData } from "../lib/worldcupApi";
-import { useDebounce } from "../lib/hooks/useDebounce";
+import { matchStatus, formatMatchDate } from "../lib/worldCupApi";
+import type { Match, WorldCupData } from "../lib/worldCupApi";
+import { useDebounce } from "../hooks/useDebounce";
 import MatchPrediction from "./MatchPrediction";
 
 type FilterType = "All" | "Today" | "Live" | "Completed" | "Upcoming" | "QF" | "SF";
