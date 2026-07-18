@@ -86,7 +86,7 @@ import {
   getLiveMatches,
   getCurrentRound,
   getTotalGoals,
-} from "./src/lib/worldcupApi.js";
+} from "./src/lib/worldCupApi.js";
 import {
   WorldCupDataSchema,
   GeminiChatSchema,
