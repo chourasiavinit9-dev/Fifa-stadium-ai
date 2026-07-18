@@ -272,7 +272,14 @@ ${venue} (${data.city}, cap ${data.capacity.toLocaleString()}):
     )
     .join("\n");
 
-  return `You are FIFAiq, the official AI assistant for FIFA World Cup 2026 stadiums.
+  return `You are FIFAiq, the official AI assistant for FIFA World Cup 2026.
+TODAY: July 18 2026. FINAL is TOMORROW July 19.
+FINAL: Argentina vs Spain — MetLife Stadium NJ — 15:00 ET.
+Argentina beat England 2-1 AET on July 15 (Fernández 86', Martínez 92').
+Spain beat France 2-0 on July 14 (Oyarzabal 22'pen, Porro 58').
+TOP SCORERS: Bellingham 7, Mbappé 6, Yamal 5, Kane 5, Messi 4.
+GATE DATABASE: MetLife — Gate A north (0.4mi NJ Transit), Gate H northwest (0.3mi Lot A, fastest entry), Gate F VIP (0.5mi). Hard Rock Miami — Gate 1 north (0.3mi Metrorail), Gate 6 VIP (0.2mi). Azteca — Puerta 1 north (0.5mi Metro L2), Puerta 8 (0.3mi bridge, fastest).
+RULES: Answer in user's language. Always give gate distances. Under 100 words. Recommend least crowded gate always.
 
 CURRENT TOURNAMENT: ${context.currentRound} | Stage: SEMI-FINALS | Total goals: ${context.totalGoals}
 ${liveMatch}
@@ -280,7 +287,7 @@ ${sf1Result}
 ${finalInfo}
 TODAY'S MATCH: ${todayStr}
 RECENT RESULTS: ${recentResults || "Quarter-finals all complete"}
-TOP SCORERS: Jude Bellingham (England) 6, Kylian Mbappé (France) 6, Harry Kane (England) 5, Lamine Yamal (Spain) 5, Lionel Messi (Argentina) 4
+TOP SCORERS: Jude Bellingham (England) 7, Kylian Mbappé (France) 6, Harry Kane (England) 5, Lamine Yamal (Spain) 5, Lionel Messi (Argentina) 4
 ACTIVE STADIUM INCIDENTS: ${context.activeIncidents}
 CURRENT SECTOR CONDITIONS:
   Fastest entry → ${lowestSector?.[0] ?? "North Stand"} (${Math.round(lowestSector?.[1] ?? 0)}% density, ${lowestWait} wait)
@@ -300,7 +307,7 @@ RULES — follow ALL of these for every response:
 5. For transport questions: give the transit stop name, distance to gate, and estimated walk time (assume 15 min per mile).
 6. Recommend the LEAST CROWDED sector/gate based on current density data when relevant.
 7. Detect user language and respond in that EXACT language (supports EN, ES, FR, AR, PT, DE, JA, KO, HI, ZH).
-8. Keep responses under 180 words but include all key distances and gate names.
+8. Keep responses under 100 words but include all key distances and gate names.
 9. If asked about food near a gate: specify exact concourse name and what items are available.
 10. For parking questions: always say which gate the lot connects to and exact distance.
 11. Never invent scores — only use confirmed results above.
@@ -379,15 +386,21 @@ export async function callGemini(
   let lastError: unknown = null;
   for (const model of modelsToTry) {
     try {
-      const response = await ai.models.generateContent({
-        model,
-        contents,
-        config: {
-          temperature: 0.7,
-          maxOutputTokens: 500,
-          topP: 0.9,
-        },
-      });
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Gemini timeout")), 15000)
+      );
+      const response = await Promise.race([
+        ai.models.generateContent({
+          model,
+          contents,
+          config: {
+            temperature: 0.7,
+            maxOutputTokens: 500,
+            topP: 0.9,
+          },
+        }),
+        timeoutPromise,
+      ]);
       if (response.text) return response.text;
     } catch (err) {
       lastError = err;

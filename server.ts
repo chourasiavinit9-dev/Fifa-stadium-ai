@@ -126,6 +126,13 @@ interface IncidentRecord {
 }
 const incidents: IncidentRecord[] = [];
 
+// ─── OPTIONS /api/worldcup (CORS preflight) ──────────────────────────────────
+app.options(["/api/worldcup", "/worldcup"], (_req: Request, res: Response) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.status(204).send();
+});
+
 // ─── GET /api/worldcup ────────────────────────────────────────────────────────
 app.get(["/api/worldcup", "/worldcup"], async (_req: Request, res: Response) => {
   try {
@@ -133,6 +140,8 @@ app.get(["/api/worldcup", "/worldcup"], async (_req: Request, res: Response) => 
     const parsed = WorldCupDataSchema.safeParse(raw);
     if (!parsed.success) {
       console.error("[worldcup] Schema validation failed:", parsed.error.issues);
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Cache-Control", "public, max-age=60, stale-while-revalidate=120");
       res.status(503).json({
         error: "Data format error",
         matches: [],
@@ -141,6 +150,8 @@ app.get(["/api/worldcup", "/worldcup"], async (_req: Request, res: Response) => 
       });
       return;
     }
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Cache-Control", "public, max-age=60, stale-while-revalidate=120");
     res.json({
       ...parsed.data,
       fetchedAt: new Date().toISOString(),
@@ -148,6 +159,8 @@ app.get(["/api/worldcup", "/worldcup"], async (_req: Request, res: Response) => 
     });
   } catch (err) {
     console.error("[worldcup] Fetch failed:", err instanceof Error ? err.message : "unknown");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Cache-Control", "public, max-age=60, stale-while-revalidate=120");
     res.status(503).json({
       error: "Data temporarily unavailable",
       matches: [],
