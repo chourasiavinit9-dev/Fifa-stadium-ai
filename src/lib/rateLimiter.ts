@@ -18,6 +18,14 @@ setInterval(() => {
   }
 }, CLEANUP_INTERVAL);
 
+/**
+ * @description Checks whether an IP address is within the allowed request rate for a given route.
+ * @param {string} ip - The client IP address
+ * @param {string} route - The API route path being accessed
+ * @param {number} maxRequests - Maximum number of requests allowed in the time window
+ * @param {number} windowMs - The sliding window duration in milliseconds (default: 60 000)
+ * @returns {{ allowed: boolean; remaining: number; resetAt: number }} Rate limit result with remaining count and reset timestamp
+ */
 export function checkRateLimit(
   ip: string,
   route: string,
@@ -50,6 +58,10 @@ export function checkRateLimit(
   };
 }
 
+/**
+ * @description Per-route maximum request limits per 60-second window.
+ * @returns {Record<string, number>} Map of route prefix to max requests allowed
+ */
 export const RATE_LIMITS = {
   "/api/worldcup": 300, // raised — static data, no quota cost
   "/api/gemini": 40,

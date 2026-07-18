@@ -1,4 +1,9 @@
 // src/lib/flagLookup.ts
+
+/**
+ * @description Lookup table mapping country names to their Unicode flag emoji.
+ * @returns {Record<string, string>} Map of country name to flag emoji string
+ */
 export const FLAG_LOOKUP: Record<string, string> = {
   Mexico: "🇲🇽",
   "South Africa": "🇿🇦",
@@ -53,6 +58,11 @@ export const FLAG_LOOKUP: Record<string, string> = {
   Panama: "🇵🇦",
 };
 
+/**
+ * @description Returns the flag emoji for a given country name, falling back to a white flag if not found.
+ * @param {string} name - The country name to look up
+ * @returns {string} The Unicode flag emoji, or "🏳" if not found
+ */
 export function getFlag(name: string): string {
   return FLAG_LOOKUP[name] ?? "🏳";
 }
