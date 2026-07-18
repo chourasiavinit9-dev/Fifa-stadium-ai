@@ -444,7 +444,9 @@ async function startServer() {
     });
   }
 
-  tryListen(PREFERRED_PORT);
+  if (!process.env.VERCEL) {
+    tryListen(PREFERRED_PORT);
+  }
 }
 
 process.on("uncaughtException", (err: NodeJS.ErrnoException) => {
@@ -456,3 +458,5 @@ process.on("uncaughtException", (err: NodeJS.ErrnoException) => {
 });
 
 startServer();
+
+export default app;
