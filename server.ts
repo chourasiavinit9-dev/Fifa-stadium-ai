@@ -6,8 +6,19 @@ import { fileURLToPath } from "url";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+let dirname = "";
+let filename = "";
+try {
+  // ESM context
+  filename = fileURLToPath(import.meta.url);
+  dirname = path.dirname(filename);
+} catch (e) {
+  // CJS context (esbuild replaces import.meta.url with {})
+  if (typeof __filename !== "undefined") filename = __filename;
+  if (typeof __dirname !== "undefined") dirname = __dirname;
+}
+const __filenameResolved = filename;
+const __dirnameResolved = dirname;
 
 const app = express();
 const PREFERRED_PORT = parseInt(process.env.PORT || "3000", 10);
@@ -409,7 +420,7 @@ async function startServer() {
     app.use(vite.middlewares);
     console.log("AEGIS Server: Vite dev middleware mounted.");
   } else {
-    const distPath = path.join(__dirname, "dist");
+    const distPath = path.join(__dirnameResolved, "dist");
     app.use(express.static(distPath));
     app.get("*", (_req: Request, res: Response) => {
       res.sendFile(path.join(distPath, "index.html"));
