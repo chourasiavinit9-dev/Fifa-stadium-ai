@@ -127,7 +127,7 @@ interface IncidentRecord {
 const incidents: IncidentRecord[] = [];
 
 // ─── GET /api/worldcup ────────────────────────────────────────────────────────
-app.get("/api/worldcup", async (_req: Request, res: Response) => {
+app.get(["/api/worldcup", "/worldcup"], async (_req: Request, res: Response) => {
   try {
     const raw = await fetchLiveData();
     const parsed = WorldCupDataSchema.safeParse(raw);
@@ -158,7 +158,7 @@ app.get("/api/worldcup", async (_req: Request, res: Response) => {
 });
 
 // ─── POST /api/gemini (Fan Chat) ──────────────────────────────────────────────
-app.post("/api/gemini", async (req: Request, res: Response) => {
+app.post(["/api/gemini", "/gemini"], async (req: Request, res: Response) => {
   const parsed = GeminiChatSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(422).json({
@@ -218,7 +218,7 @@ app.post("/api/gemini", async (req: Request, res: Response) => {
 });
 
 // ─── POST /api/gemini-ops (Ops AI Decision) ───────────────────────────────────
-app.post("/api/gemini-ops", async (req: Request, res: Response) => {
+app.post(["/api/gemini-ops", "/gemini-ops"], async (req: Request, res: Response) => {
   const parsed = GeminiOpsSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(422).json({
@@ -269,7 +269,7 @@ app.post("/api/gemini-ops", async (req: Request, res: Response) => {
 });
 
 // ─── POST /api/gemini-transport (Journey Planner) ────────────────────────────
-app.post("/api/gemini-transport", async (req: Request, res: Response) => {
+app.post(["/api/gemini-transport", "/gemini-transport"], async (req: Request, res: Response) => {
   const { origin, matchInfo } = req.body as { origin?: string; matchInfo?: string };
   if (!origin || typeof origin !== "string") {
     res.status(422).json({ error: "Origin required" });
@@ -298,7 +298,7 @@ app.post("/api/gemini-transport", async (req: Request, res: Response) => {
 });
 
 // ─── POST /api/gemini-eco (Sustainability Eco Tip) ────────────────────────────
-app.post("/api/gemini-eco", async (_req: Request, res: Response) => {
+app.post(["/api/gemini-eco", "/gemini-eco"], async (_req: Request, res: Response) => {
   const systemPrompt = buildSustainabilitySystemPrompt();
   try {
     const response = await callGemini(systemPrompt, "Give me one specific eco tip.");
@@ -312,7 +312,7 @@ app.post("/api/gemini-eco", async (_req: Request, res: Response) => {
 });
 
 // ─── POST /api/anomaly ────────────────────────────────────────────────────────
-app.post("/api/anomaly", (req: Request, res: Response) => {
+app.post(["/api/anomaly", "/anomaly"], (req: Request, res: Response) => {
   try {
     const parsed = AnomalyReportSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -343,7 +343,7 @@ app.post("/api/anomaly", (req: Request, res: Response) => {
 });
 
 // ─── GET /api/anomaly ─────────────────────────────────────────────────────────
-app.get("/api/anomaly", (_req: Request, res: Response) => {
+app.get(["/api/anomaly", "/anomaly"], (_req: Request, res: Response) => {
   res.json({
     count: incidents.length,
     incidents: incidents.slice(-10),
@@ -368,7 +368,7 @@ const STADIUM_TELEMETRY = {
   },
 };
 
-app.post("/api/jarvis", async (req: Request, res: Response) => {
+app.post(["/api/jarvis", "/jarvis"], async (req: Request, res: Response) => {
   const { message, chatHistory, scenario } = req.body as {
     message?: string;
     chatHistory?: Array<{ role: string; content: string }>;
