@@ -53,52 +53,22 @@ export default async function handler(
   req: IncomingMessage,
   res: ServerResponse
 ) {
-  // Set CORS headers on every response
   Object.entries(CORS_HEADERS).forEach(([k, v]) => res.setHeader(k, v));
 
-  // Handle preflight
   if (req.method === "OPTIONS") {
     res.statusCode = 204;
     res.end();
     return;
   }
 
-  let matches: unknown[] = [...CURATED_MATCHES];
-
-  // Try fetching live data from CDN (5s timeout)
-  try {
-    const controller = new AbortController();
-    const tid = setTimeout(() => controller.abort(), 5000);
-    const r = await fetch(
-      `https://cdn.jsdelivr.net/gh/openfootball/worldcup.json/2026/worldcup.json?v=${Date.now()}`,
-      { signal: controller.signal, headers: { "Cache-Control": "no-cache" } }
-    );
-    clearTimeout(tid);
-    if (r.ok) {
-      const d = (await r.json()) as { matches?: Array<Record<string, unknown>> };
-      if (Array.isArray(d.matches) && d.matches.length > 0) {
-        // Only accept external GROUP STAGE matches (before July 4).
-        // ALL knockout rounds (R16, QF, SF, 3rd place, Final) are curated
-        // and authoritative — external CDN mock data must not override them.
-        const KNOCKOUT_CUTOFF = "2026-07-04";
-        const groupStageOnly = d.matches.filter((m) => {
-          const date = String(m.date ?? "");
-          return date < KNOCKOUT_CUTOFF;
-        });
-        matches = [...CURATED_MATCHES, ...groupStageOnly];
-      }
-    }
-  } catch {
-    // CDN failed — use curated only (still works fine)
-  }
-
   res.statusCode = 200;
   res.end(
     JSON.stringify({
       name: "FIFA World Cup 2026",
-      matches,
+      matches: CURATED_MATCHES,
       fetchedAt: new Date().toISOString(),
-      source: "live",
+      source: "curated",
     })
   );
 }
+

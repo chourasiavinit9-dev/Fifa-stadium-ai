@@ -349,37 +349,27 @@ export async function fetchLiveData(): Promise<WorldCupData> {
     return cache.data;
   }
 
-  let external: Match[] = [];
-
   try {
-    const raw = await fetchWithTimeout(PRIMARY_URL);
-    external = raw.matches;
+    const res = await fetch("/api/worldcup", {
+      headers: { "Cache-Control": "no-cache" },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = (await res.json()) as unknown;
+    const data = json as WorldCupData;
+    if (!Array.isArray(data.matches)) throw new Error("Invalid data shape");
+
+    // Ensure curated knockout data takes priority over anything the server sent
+    const merged: WorldCupData = {
+      name: data.name ?? "FIFA World Cup 2026",
+      matches: mergeCurated(data.matches),
+    };
+    cache.data = merged;
+    cache.fetchedAt = Date.now();
+    cache.lastGood = merged;
+    return merged;
   } catch {
-    try {
-      const raw = await fetchWithTimeout(FALLBACK_URL);
-      external = raw.matches;
-    } catch {
-      // Both failed — use curated only
-      const curated: WorldCupData = {
-        name: "FIFA World Cup 2026",
-        matches: CURATED_MATCHES,
-      };
-      cache.data = curated;
-      cache.fetchedAt = Date.now();
-      return curated;
-    }
+    return cache.lastGood ?? HARDCODED_FALLBACK;
   }
-
-  // Always merge curated data on top
-  const merged: WorldCupData = {
-    name: "FIFA World Cup 2026",
-    matches: mergeCurated(external),
-  };
-
-  cache.data = merged;
-  cache.fetchedAt = Date.now();
-  cache.lastGood = merged;
-  return merged;
 }
 
 
