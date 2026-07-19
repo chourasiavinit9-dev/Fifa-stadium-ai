@@ -67,12 +67,21 @@ const CURATED_MATCHES: Match[] = [
     team1: "France",
     team2: "England",
     ground: "Hard Rock Stadium, Miami FL",
-    score: { ft: [2, 1], ht: [1, 0] },
+    score: { ft: [4, 6], ht: [1, 2] },
     goals1: [
-      { name: "Kylian Mbappé", minute: "34" },
-      { name: "Ousmane Dembélé", minute: "73" },
+      { name: "Kylian Mbappé", minute: "48" },
+      { name: "Bradley Barcola", minute: "54" },
+      { name: "Kylian Mbappé", minute: "66" },
+      { name: "Ousmane Dembélé", minute: "90+6" },
     ],
-    goals2: [{ name: "Harry Kane", minute: "90+4" }],
+    goals2: [
+      { name: "Declan Rice", minute: "3" },
+      { name: "Erling Haaland", minute: "18" },
+      { name: "Bukayo Saka", minute: "37" },
+      { name: "Bukayo Saka", minute: "45+1" },
+      { name: "Bukayo Saka", minute: "77" },
+      { name: "Jude Bellingham", minute: "90+8" },
+    ],
   },
   // ── SEMI-FINALS ────────────────────────────────────────────────────────────
   {
