@@ -20,6 +20,7 @@ import CctvAnalyzer from "./components/CctvAnalyzer";
 import OrganizerDashboard from "./components/OrganizerDashboard";
 import StadiumMap from "./components/StadiumMap";
 import LiveScoreBoard from "./components/LiveScoreBoard";
+import FinalCountdown from "./components/FinalCountdown";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { TelemetryData, Gate, IncidentAlert, TwinLayer, OperationScenario } from "./types";
 import type { WorldCupData } from "./lib/worldCupApi";
@@ -452,6 +453,11 @@ export default function App() {
 
               </div>
             </header>
+
+            {/* 🏆 FINAL COUNTDOWN — First visible panel */}
+            <ErrorBoundary componentName="Final Countdown" fallback="Final countdown temporarily unavailable">
+              <FinalCountdown />
+            </ErrorBoundary>
 
             {/* ⚽ LIVE SCOREBOARD — Full width at top of ops dashboard */}
             <ErrorBoundary componentName="Live Score" fallback="Live score temporarily unavailable">

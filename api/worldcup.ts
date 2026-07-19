@@ -20,14 +20,14 @@ const CURATED_MATCHES = [
     time: "15:00 UTC-4",
   },
   {
-    round: "Third place",
+    round: "Match for third place",
     date: "2026-07-18",
     team1: "France",
     team2: "England",
-    score: { ft: [0, 0] },
+    score: { ft: [2, 1], ht: [1, 0] },
     ground: "Hard Rock Stadium",
     city: "Miami FL",
-    time: "15:00 UTC-4",
+    time: "15:00 UTC-5",
   },
   {
     round: "Semi-finals",
