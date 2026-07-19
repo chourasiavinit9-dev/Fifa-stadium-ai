@@ -1,5 +1,21 @@
-// Standalone Vercel serverless function — no Express/server.ts dependency
+/**
+ * @file api/worldcup.ts
+ * Standalone Vercel serverless handler — no Express/server.ts dependency.
+ *
+ * Serves FIFA World Cup 2026 match data by smart-merging:
+ *  - Curated authoritative knockout results (always takes precedence)
+ *  - Live group-stage data from the openfootball CDN
+ *  - Auto-fill from CDN for unscored knockout fixtures (e.g. the Final)
+ */
 import type { IncomingMessage, ServerResponse } from "http";
+
+// ── Constants ──────────────────────────────────────────────────────────────────
+
+const TOURNAMENT_NAME = "FIFA World Cup 2026" as const;
+const KNOCKOUT_CUTOFF_DATE = "2026-07-04" as const;
+const CDN_URL =
+  "https://cdn.jsdelivr.net/gh/openfootball/worldcup.json/2026/worldcup.json";
+const CDN_TIMEOUT_MS = 5_000;
 
 const CORS_HEADERS: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -8,10 +24,54 @@ const CORS_HEADERS: Record<string, string> = {
   "Content-Type": "application/json",
 };
 
-// ── Curated authoritative knockout data ────────────────────────────────────────
-// These are ALWAYS shown. Scores here override CDN. Unscored entries (Final)
-// will auto-fill from CDN once the match result is available.
-const CURATED_MATCHES = [
+// ── Types ──────────────────────────────────────────────────────────────────────
+
+interface Score {
+  ft: [number, number];
+  ht?: [number, number];
+}
+
+interface Goal {
+  name: string;
+  minute: string;
+}
+
+interface CuratedMatch {
+  round: string;
+  date: string;
+  team1: string;
+  team2: string;
+  ground: string;
+  city?: string;
+  time?: string;
+  score?: Score;
+  goals1?: Goal[];
+  goals2?: Goal[];
+}
+
+/** Loose shape of a match record returned by the openfootball CDN. */
+interface CdnMatch {
+  round?: string;
+  date?: string;
+  team1?: string;
+  team2?: string;
+  score?: Score;
+  goals1?: Goal[];
+  goals2?: Goal[];
+  [key: string]: unknown;
+}
+
+interface ApiResponse {
+  name: string;
+  matches: unknown[];
+  fetchedAt: string;
+  source: string;
+}
+
+// ── Curated authoritative knockout data ───────────────────────────────────────
+// These are ALWAYS shown. Curated scores override CDN. Unscored entries (Final)
+// auto-fill from CDN once the result is available.
+const CURATED_MATCHES: CuratedMatch[] = [
   {
     round: "Final",
     date: "2026-07-19",
@@ -20,7 +80,7 @@ const CURATED_MATCHES = [
     ground: "MetLife Stadium",
     city: "East Rutherford NJ",
     time: "15:00 UTC-4",
-    // No score yet — will auto-fill from CDN after match
+    // score intentionally absent — auto-fills from CDN post-match
   },
   {
     round: "Match for third place",
@@ -66,7 +126,13 @@ const CURATED_MATCHES = [
   },
 ];
 
-// ── Helper: team-pair key (date-independent) ───────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────
+
+/**
+ * Returns a normalised, date-independent key for a team pair.
+ * Strips non-alpha chars and sorts alphabetically so the key is
+ * consistent regardless of home/away order or date format differences.
+ */
 function teamPairKey(t1: string, t2: string): string {
   return [
     t1.toLowerCase().replace(/[^a-z]/g, ""),
@@ -76,26 +142,30 @@ function teamPairKey(t1: string, t2: string): string {
     .join("|");
 }
 
-// ── Smart merge ────────────────────────────────────────────────────────────────
-// 1. Group stage (< Jul 4): all from CDN → full history
-// 2. Knockouts with curated score: always curated (correct data)
-// 3. Knockouts WITHOUT curated score (Final): auto-fill from CDN
-function smartMerge(
-  external: Array<Record<string, unknown>>
-): unknown[] {
-  const CUTOFF = "2026-07-04";
+/**
+ * Merges curated knockout data with raw CDN match records:
+ *  1. **Group stage** (< `KNOCKOUT_CUTOFF_DATE`): all CDN records included for full history.
+ *  2. **Knockouts with a curated score**: curated always wins — our data is authoritative.
+ *  3. **Knockouts without a curated score** (e.g. Final): auto-fill score from CDN
+ *     so the winner appears automatically once the CDN updates post-match.
+ *
+ * Results are sorted newest-first for scoreboard display.
+ */
+function smartMerge(external: CdnMatch[]): unknown[] {
+  const groupStage = external.filter(
+    (m) => String(m.date ?? "") < KNOCKOUT_CUTOFF_DATE
+  );
+  const extKnockouts = external.filter(
+    (m) => String(m.date ?? "") >= KNOCKOUT_CUTOFF_DATE
+  );
 
-  const groupStage = external.filter((m) => String(m.date ?? "") < CUTOFF);
-  const extKnockouts = external.filter((m) => String(m.date ?? "") >= CUTOFF);
+  const knockouts: unknown[] = CURATED_MATCHES.map((curated) => {
+    if (curated.score) return curated; // Curated score wins — never override
 
-  const knockouts = CURATED_MATCHES.map((curated) => {
-    // Already scored — curated wins, never override
-    if (curated.score) return curated;
-
-    // No score yet — look for CDN result by team pair
+    // No score yet: find matching CDN entry by team pair (date-agnostic)
     const ourKey = teamPairKey(curated.team1, curated.team2);
     const ext = extKnockouts.find(
-      (m) => teamPairKey(String(m.team1 ?? ""), String(m.team2 ?? "")) === ourKey
+      (m) => teamPairKey(m.team1 ?? "", m.team2 ?? "") === ourKey
     );
 
     if (ext?.score) {
@@ -107,22 +177,29 @@ function smartMerge(
       };
     }
 
-    return curated; // Not played yet
+    return curated; // Match not yet played
   });
 
-  // Sort newest first
   return [...knockouts, ...groupStage].sort((a, b) => {
-    const da = String((a as Record<string, unknown>).date ?? "");
-    const db = String((b as Record<string, unknown>).date ?? "");
+    const da = String((a as CdnMatch).date ?? "");
+    const db = String((b as CdnMatch).date ?? "");
     return db.localeCompare(da);
   });
 }
 
-// ── Handler ────────────────────────────────────────────────────────────────────
+// ── Serverless Handler ─────────────────────────────────────────────────────────
+
+/**
+ * GET /api/worldcup
+ *
+ * Returns a merged JSON payload containing curated knockout results and
+ * live group-stage data from the openfootball CDN. Falls back to curated-only
+ * data if the CDN is unreachable within `CDN_TIMEOUT_MS`.
+ */
 export default async function handler(
   req: IncomingMessage,
   res: ServerResponse
-) {
+): Promise<void> {
   Object.entries(CORS_HEADERS).forEach(([k, v]) => res.setHeader(k, v));
 
   if (req.method === "OPTIONS") {
@@ -133,33 +210,32 @@ export default async function handler(
 
   let matches: unknown[] = CURATED_MATCHES;
 
-  // Try live CDN (5s timeout)
   try {
     const controller = new AbortController();
-    const tid = setTimeout(() => controller.abort(), 5000);
-    const r = await fetch(
-      `https://cdn.jsdelivr.net/gh/openfootball/worldcup.json/2026/worldcup.json?v=${Date.now()}`,
-      { signal: controller.signal, headers: { "Cache-Control": "no-cache" } }
-    );
+    const tid = setTimeout(() => controller.abort(), CDN_TIMEOUT_MS);
+    const r = await fetch(`${CDN_URL}?v=${Date.now()}`, {
+      signal: controller.signal,
+      headers: { "Cache-Control": "no-cache" },
+    });
     clearTimeout(tid);
 
     if (r.ok) {
-      const d = (await r.json()) as { matches?: Array<Record<string, unknown>> };
+      const d = (await r.json()) as { matches?: CdnMatch[] };
       if (Array.isArray(d.matches) && d.matches.length > 0) {
         matches = smartMerge(d.matches);
       }
     }
   } catch {
-    // CDN failed — curated only is fine
+    // CDN unreachable — curated-only fallback is served above
   }
 
+  const body: ApiResponse = {
+    name: TOURNAMENT_NAME,
+    matches,
+    fetchedAt: new Date().toISOString(),
+    source: "smart-merged",
+  };
+
   res.statusCode = 200;
-  res.end(
-    JSON.stringify({
-      name: "FIFA World Cup 2026",
-      matches,
-      fetchedAt: new Date().toISOString(),
-      source: "smart-merged",
-    })
-  );
+  res.end(JSON.stringify(body));
 }

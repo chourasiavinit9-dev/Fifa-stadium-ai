@@ -77,7 +77,8 @@ interface Prediction {
 }
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
-function CountUnit({ value, label }: { value: number; label: string }) {
+/** Displays a single countdown unit (e.g. "07 DAYS"). Memoised — re-renders only when value changes. */
+const CountUnit = React.memo(function CountUnit({ value, label }: { value: number; label: string }) {
   const str = String(value).padStart(2, "0");
   return (
     <div className="flex flex-col items-center">
@@ -111,9 +112,10 @@ function CountUnit({ value, label }: { value: number; label: string }) {
       </span>
     </div>
   );
-}
+});
 
-function PathCard({ team, flag, path }: { team: string; flag: string; path: PathMatch[] }) {
+/** Displays a team's path to the Final. Memoised — static data, never re-renders during countdown. */
+const PathCard = React.memo(function PathCard({ team, flag, path }: { team: string; flag: string; path: PathMatch[] }) {
   return (
     <div
       style={{
@@ -164,7 +166,7 @@ function PathCard({ team, flag, path }: { team: string; flag: string; path: Path
       </div>
     </div>
   );
-}
+});
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 export default function FinalCountdown() {

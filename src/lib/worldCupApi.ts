@@ -42,10 +42,22 @@ export interface TeamStanding {
   pts: number;
 }
 
+/** Primary CDN mirror for openfootball 2026 match data. */
 const PRIMARY_URL =
   "https://cdn.jsdelivr.net/gh/openfootball/worldcup.json/2026/worldcup.json";
+
+/** GitHub raw fallback if jsDelivr is unreachable. */
 const FALLBACK_URL =
   "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json";
+
+/** Shared tournament name string to avoid repetition. */
+const TOURNAMENT_NAME = "FIFA World Cup 2026" as const;
+
+/**
+ * Matches on or after this date are knockout-round fixtures.
+ * Group-stage matches (before this date) are sourced exclusively from the CDN.
+ */
+const KNOCKOUT_CUTOFF_DATE = "2026-07-04" as const;
 
 // ─── Curated real results — always merged on top of any external data ─────────
 // These are authoritative. External API data is supplementary.
@@ -295,40 +307,40 @@ const CURATED_MATCHES: Match[] = [
   },
 ];
 
-// Normalized team-pair key (date-independent) — for auto-updating unscored matches
+/**
+ * Returns a stable, date-independent key for a team pair.
+ * Used to match curated fixtures against CDN data regardless of date format.
+ */
 function teamPairKey(t1: string, t2: string): string {
-  return [t1.toLowerCase().replace(/[^a-z]/g, ""), t2.toLowerCase().replace(/[^a-z]/g, "")].sort().join("|");
+  return [
+    t1.toLowerCase().replace(/[^a-z]/g, ""),
+    t2.toLowerCase().replace(/[^a-z]/g, ""),
+  ]
+    .sort()
+    .join("|");
 }
 
 /**
- * Smart merge strategy:
- *  1. GROUP STAGE (< Jul 4): show ALL external matches — gives full tournament history
- *  2. KNOCKOUTS with curated score: always use curated — our data is correct
- *  3. KNOCKOUTS without curated score (e.g. Final before kick-off): auto-fill from CDN
- *     so the winner appears automatically once CDN updates
+ * Merges curated authoritative data with external CDN data using three rules:
+ *  1. **Group stage** (before `KNOCKOUT_CUTOFF_DATE`): show all CDN matches for full history.
+ *  2. **Knockouts with a curated score**: always use curated — our data is authoritative.
+ *  3. **Knockouts without a curated score** (e.g. Final pre-result): auto-fill from CDN
+ *     so the winner appears automatically once the CDN updates post-match.
  */
 function smartMerge(external: Match[]): Match[] {
-  const KNOCKOUT_CUTOFF = "2026-07-04";
+  const groupStage = external.filter((m) => m.date < KNOCKOUT_CUTOFF_DATE);
+  const externalKnockouts = external.filter((m) => m.date >= KNOCKOUT_CUTOFF_DATE);
 
-  // All group stage from CDN
-  const groupStage = external.filter((m) => m.date < KNOCKOUT_CUTOFF);
-
-  // External knockout entries — used ONLY to fill in missing scores
-  const externalKnockouts = external.filter((m) => m.date >= KNOCKOUT_CUTOFF);
-
-  // Process each curated knockout match
   const knockouts = CURATED_MATCHES.map((curated) => {
-    // Already has a score — our data wins, never override
-    if (curated.score) return curated;
+    if (curated.score) return curated; // Curated score wins — never override
 
-    // No score yet — check if CDN has a result for this team pair
+    // No score yet: look for CDN result by team pair (date-agnostic)
     const ourKey = teamPairKey(curated.team1, curated.team2);
     const ext = externalKnockouts.find(
       (m) => teamPairKey(m.team1, m.team2) === ourKey
     );
 
     if (ext?.score) {
-      // Auto-fill from CDN (Final auto-update)
       return {
         ...curated,
         score: ext.score,
@@ -337,18 +349,17 @@ function smartMerge(external: Match[]): Match[] {
       };
     }
 
-    return curated; // Match not played yet
+    return curated; // Match not yet played
   });
 
-  // Combine and sort chronologically (newest first for scoreboard display)
   return [...knockouts, ...groupStage].sort((a, b) =>
     b.date.localeCompare(a.date)
   );
 }
 
-// Authoritative fallback = curated data only
-const HARDCODED_FALLBACK: WorldCupData = {
-  name: "FIFA World Cup 2026",
+/** In-memory cache to avoid redundant CDN requests within the TTL window. */
+const FALLBACK_DATA: WorldCupData = {
+  name: TOURNAMENT_NAME,
   matches: CURATED_MATCHES,
 };
 
@@ -382,6 +393,12 @@ async function fetchWithTimeout(url: string): Promise<WorldCupData> {
   }
 }
 
+/**
+ * Fetches live World Cup match data, merges it with curated results, and
+ * caches the result for `CACHE_TTL` milliseconds to limit CDN requests.
+ *
+ * Falls back to curated-only data if both CDN sources are unreachable.
+ */
 export async function fetchLiveData(): Promise<WorldCupData> {
   if (cache.data && Date.now() - cache.fetchedAt < CACHE_TTL) {
     return cache.data;
@@ -397,19 +414,15 @@ export async function fetchLiveData(): Promise<WorldCupData> {
       const raw = await fetchWithTimeout(FALLBACK_URL);
       external = raw.matches;
     } catch {
-      // Both CDN sources failed — return curated only
-      const curated: WorldCupData = {
-        name: "FIFA World Cup 2026",
-        matches: CURATED_MATCHES,
-      };
-      cache.data = curated;
+      // Both CDN sources unreachable — serve authoritative curated data
+      cache.data = FALLBACK_DATA;
       cache.fetchedAt = Date.now();
-      return curated;
+      return FALLBACK_DATA;
     }
   }
 
   const merged: WorldCupData = {
-    name: "FIFA World Cup 2026",
+    name: TOURNAMENT_NAME,
     matches: smartMerge(external),
   };
 
@@ -419,27 +432,37 @@ export async function fetchLiveData(): Promise<WorldCupData> {
   return merged;
 }
 
-
-
-
+/**
+ * Parses a match kickoff time string (e.g. `"17:00 UTC-5"`) and returns
+ * a UTC `Date`. Defaults to midday UTC when no time is provided.
+ */
 export function parseKickoffUTC(dateStr: string, timeStr?: string): Date {
-  if (!timeStr) {
-    return new Date(`${dateStr}T12:00:00Z`);
-  }
+  if (!timeStr) return new Date(`${dateStr}T12:00:00Z`);
+
   // e.g. "17:00 UTC-5", "13:00 UTC-6", "20:00 UTC-4"
   const match = timeStr.match(/^(\d{1,2}):(\d{2})\s*UTC([+-]\d+)/);
   if (!match) return new Date(`${dateStr}T12:00:00Z`);
+
   const hours = parseInt(match[1], 10);
   const minutes = parseInt(match[2], 10);
   const offsetHours = parseInt(match[3], 10);
-  // Convert local time to UTC: UTC = local - offset
-  const utcHours = hours - offsetHours;
-  const utcDate = new Date(
+  const utcHours = hours - offsetHours; // Convert local → UTC
+
+  return new Date(
     `${dateStr}T${String(utcHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00Z`
   );
-  return utcDate;
 }
 
+/** Live-window: 30 min before kick-off to 110 min after (full-time + stoppage). */
+const LIVE_WINDOW_BEFORE_MS = 30 * 60 * 1000;
+const LIVE_WINDOW_AFTER_MS = 110 * 60 * 1000;
+
+/**
+ * Returns the current status of a match.
+ * - `completed`  — final score is recorded
+ * - `live`       — within the broadcast window
+ * - `upcoming`   — not yet started
+ */
 export function matchStatus(
   match: Match,
   now: Date = new Date()
@@ -447,16 +470,17 @@ export function matchStatus(
   if (match.score?.ft) return "completed";
 
   const todayUTC = now.toISOString().slice(0, 10);
-  if (match.date === todayUTC && !match.score) {
+  if (match.date === todayUTC) {
     const kickoff = parseKickoffUTC(match.date, match.time);
-    const windowStart = new Date(kickoff.getTime() - 30 * 60 * 1000);
-    const windowEnd = new Date(kickoff.getTime() + 110 * 60 * 1000);
+    const windowStart = new Date(kickoff.getTime() - LIVE_WINDOW_BEFORE_MS);
+    const windowEnd = new Date(kickoff.getTime() + LIVE_WINDOW_AFTER_MS);
     if (now >= windowStart && now <= windowEnd) return "live";
   }
 
   return "upcoming";
 }
 
+/** Returns all matches scheduled for today (UTC). */
 export function getTodaysMatches(
   data: WorldCupData,
   now: Date = new Date()
@@ -465,10 +489,12 @@ export function getTodaysMatches(
   return data.matches.filter((m) => m.date === today);
 }
 
+/** Returns all matches that have a recorded full-time score. */
 export function getCompletedMatches(data: WorldCupData): Match[] {
   return data.matches.filter((m) => !!m.score?.ft);
 }
 
+/** Returns matches that have not yet kicked off. */
 export function getUpcomingMatches(
   data: WorldCupData,
   now: Date = new Date()
@@ -476,6 +502,7 @@ export function getUpcomingMatches(
   return data.matches.filter((m) => matchStatus(m, now) === "upcoming");
 }
 
+/** Returns matches currently within the broadcast window. */
 export function getLiveMatches(
   data: WorldCupData,
   now: Date = new Date()
@@ -483,6 +510,7 @@ export function getLiveMatches(
   return data.matches.filter((m) => matchStatus(m, now) === "live");
 }
 
+/** Returns all matches whose round label contains the given string (case-insensitive). */
 export function getMatchesByRound(data: WorldCupData, round: string): Match[] {
   return data.matches.filter((m) =>
     m.round.toLowerCase().includes(round.toLowerCase())
@@ -604,6 +632,10 @@ export function formatMatchDate(dateStr: string): string {
   }).format(new Date(`${dateStr}T12:00:00Z`));
 }
 
+/**
+ * Returns the label of the current or next upcoming round.
+ * Falls back to `"Group Stage"` if no future matches exist.
+ */
 export function getCurrentRound(
   data: WorldCupData,
   now: Date = new Date()
@@ -615,11 +647,11 @@ export function getCurrentRound(
   const upcoming = data.matches
     .filter((m) => m.date > today)
     .sort((a, b) => a.date.localeCompare(b.date));
-  if (upcoming.length > 0) return upcoming[0].round;
 
-  return "Group Stage";
+  return upcoming[0]?.round ?? "Group Stage";
 }
 
+/** Sums all goals scored across completed matches. */
 export function getTotalGoals(data: WorldCupData): number {
   return data.matches.reduce((sum, m) => {
     if (!m.score?.ft) return sum;
