@@ -8,7 +8,9 @@ const CORS_HEADERS: Record<string, string> = {
   "Content-Type": "application/json",
 };
 
-// Curated authoritative match data — always returned
+// ── Curated authoritative knockout data ────────────────────────────────────────
+// These are ALWAYS shown. Scores here override CDN. Unscored entries (Final)
+// will auto-fill from CDN once the match result is available.
 const CURATED_MATCHES = [
   {
     round: "Final",
@@ -18,6 +20,7 @@ const CURATED_MATCHES = [
     ground: "MetLife Stadium",
     city: "East Rutherford NJ",
     time: "15:00 UTC-4",
+    // No score yet — will auto-fill from CDN after match
   },
   {
     round: "Match for third place",
@@ -25,6 +28,11 @@ const CURATED_MATCHES = [
     team1: "France",
     team2: "England",
     score: { ft: [2, 1], ht: [1, 0] },
+    goals1: [
+      { name: "Kylian Mbappé", minute: "34" },
+      { name: "Ousmane Dembélé", minute: "73" },
+    ],
+    goals2: [{ name: "Harry Kane", minute: "90+4" }],
     ground: "Hard Rock Stadium",
     city: "Miami FL",
     time: "15:00 UTC-5",
@@ -49,6 +57,59 @@ const CURATED_MATCHES = [
   },
 ];
 
+// ── Helper: team-pair key (date-independent) ───────────────────────────────────
+function teamPairKey(t1: string, t2: string): string {
+  return [
+    t1.toLowerCase().replace(/[^a-z]/g, ""),
+    t2.toLowerCase().replace(/[^a-z]/g, ""),
+  ]
+    .sort()
+    .join("|");
+}
+
+// ── Smart merge ────────────────────────────────────────────────────────────────
+// 1. Group stage (< Jul 4): all from CDN → full history
+// 2. Knockouts with curated score: always curated (correct data)
+// 3. Knockouts WITHOUT curated score (Final): auto-fill from CDN
+function smartMerge(
+  external: Array<Record<string, unknown>>
+): unknown[] {
+  const CUTOFF = "2026-07-04";
+
+  const groupStage = external.filter((m) => String(m.date ?? "") < CUTOFF);
+  const extKnockouts = external.filter((m) => String(m.date ?? "") >= CUTOFF);
+
+  const knockouts = CURATED_MATCHES.map((curated) => {
+    // Already scored — curated wins, never override
+    if (curated.score) return curated;
+
+    // No score yet — look for CDN result by team pair
+    const ourKey = teamPairKey(curated.team1, curated.team2);
+    const ext = extKnockouts.find(
+      (m) => teamPairKey(String(m.team1 ?? ""), String(m.team2 ?? "")) === ourKey
+    );
+
+    if (ext?.score) {
+      return {
+        ...curated,
+        score: ext.score,
+        ...(ext.goals1 ? { goals1: ext.goals1 } : {}),
+        ...(ext.goals2 ? { goals2: ext.goals2 } : {}),
+      };
+    }
+
+    return curated; // Not played yet
+  });
+
+  // Sort newest first
+  return [...knockouts, ...groupStage].sort((a, b) => {
+    const da = String((a as Record<string, unknown>).date ?? "");
+    const db = String((b as Record<string, unknown>).date ?? "");
+    return db.localeCompare(da);
+  });
+}
+
+// ── Handler ────────────────────────────────────────────────────────────────────
 export default async function handler(
   req: IncomingMessage,
   res: ServerResponse
@@ -61,14 +122,35 @@ export default async function handler(
     return;
   }
 
+  let matches: unknown[] = CURATED_MATCHES;
+
+  // Try live CDN (5s timeout)
+  try {
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 5000);
+    const r = await fetch(
+      `https://cdn.jsdelivr.net/gh/openfootball/worldcup.json/2026/worldcup.json?v=${Date.now()}`,
+      { signal: controller.signal, headers: { "Cache-Control": "no-cache" } }
+    );
+    clearTimeout(tid);
+
+    if (r.ok) {
+      const d = (await r.json()) as { matches?: Array<Record<string, unknown>> };
+      if (Array.isArray(d.matches) && d.matches.length > 0) {
+        matches = smartMerge(d.matches);
+      }
+    }
+  } catch {
+    // CDN failed — curated only is fine
+  }
+
   res.statusCode = 200;
   res.end(
     JSON.stringify({
       name: "FIFA World Cup 2026",
-      matches: CURATED_MATCHES,
+      matches,
       fetchedAt: new Date().toISOString(),
-      source: "curated",
+      source: "smart-merged",
     })
   );
 }
-

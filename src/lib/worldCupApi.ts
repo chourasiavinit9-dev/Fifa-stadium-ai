@@ -286,27 +286,56 @@ const CURATED_MATCHES: Match[] = [
   },
 ];
 
-// Normalized key for deduplication: date + sorted teams
-function matchKey(m: Match): string {
-  const teams = [m.team1.toLowerCase().replace(/[^a-z]/g, ""), m.team2.toLowerCase().replace(/[^a-z]/g, "")].sort();
-  return `${m.date}|${teams[0]}|${teams[1]}`;
+// Normalized team-pair key (date-independent) — for auto-updating unscored matches
+function teamPairKey(t1: string, t2: string): string {
+  return [t1.toLowerCase().replace(/[^a-z]/g, ""), t2.toLowerCase().replace(/[^a-z]/g, "")].sort().join("|");
 }
 
 /**
- * Merge curated matches on top of external data.
- * Only group-stage external matches (before July 4) are accepted.
- * All knockout rounds are exclusively from curated data.
+ * Smart merge strategy:
+ *  1. GROUP STAGE (< Jul 4): show ALL external matches — gives full tournament history
+ *  2. KNOCKOUTS with curated score: always use curated — our data is correct
+ *  3. KNOCKOUTS without curated score (e.g. Final before kick-off): auto-fill from CDN
+ *     so the winner appears automatically once CDN updates
  */
-function mergeCurated(external: Match[]): Match[] {
-  // Only accept external group stage matches — knockouts are all curated
+function smartMerge(external: Match[]): Match[] {
   const KNOCKOUT_CUTOFF = "2026-07-04";
-  const groupStageOnly = external.filter((m) => m.date < KNOCKOUT_CUTOFF);
 
-  return [...CURATED_MATCHES, ...groupStageOnly].sort((a, b) =>
-    a.date.localeCompare(b.date)
+  // All group stage from CDN
+  const groupStage = external.filter((m) => m.date < KNOCKOUT_CUTOFF);
+
+  // External knockout entries — used ONLY to fill in missing scores
+  const externalKnockouts = external.filter((m) => m.date >= KNOCKOUT_CUTOFF);
+
+  // Process each curated knockout match
+  const knockouts = CURATED_MATCHES.map((curated) => {
+    // Already has a score — our data wins, never override
+    if (curated.score) return curated;
+
+    // No score yet — check if CDN has a result for this team pair
+    const ourKey = teamPairKey(curated.team1, curated.team2);
+    const ext = externalKnockouts.find(
+      (m) => teamPairKey(m.team1, m.team2) === ourKey
+    );
+
+    if (ext?.score) {
+      // Auto-fill from CDN (Final auto-update)
+      return {
+        ...curated,
+        score: ext.score,
+        ...(ext.goals1 ? { goals1: ext.goals1 } : {}),
+        ...(ext.goals2 ? { goals2: ext.goals2 } : {}),
+      };
+    }
+
+    return curated; // Match not played yet
+  });
+
+  // Combine and sort chronologically (newest first for scoreboard display)
+  return [...knockouts, ...groupStage].sort((a, b) =>
+    b.date.localeCompare(a.date)
   );
 }
-
 
 // Authoritative fallback = curated data only
 const HARDCODED_FALLBACK: WorldCupData = {
@@ -349,27 +378,36 @@ export async function fetchLiveData(): Promise<WorldCupData> {
     return cache.data;
   }
 
-  try {
-    const res = await fetch("/api/worldcup", {
-      headers: { "Cache-Control": "no-cache" },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = (await res.json()) as unknown;
-    const data = json as WorldCupData;
-    if (!Array.isArray(data.matches)) throw new Error("Invalid data shape");
+  let external: Match[] = [];
 
-    // Ensure curated knockout data takes priority over anything the server sent
-    const merged: WorldCupData = {
-      name: data.name ?? "FIFA World Cup 2026",
-      matches: mergeCurated(data.matches),
-    };
-    cache.data = merged;
-    cache.fetchedAt = Date.now();
-    cache.lastGood = merged;
-    return merged;
+  try {
+    const raw = await fetchWithTimeout(PRIMARY_URL);
+    external = raw.matches;
   } catch {
-    return cache.lastGood ?? HARDCODED_FALLBACK;
+    try {
+      const raw = await fetchWithTimeout(FALLBACK_URL);
+      external = raw.matches;
+    } catch {
+      // Both CDN sources failed — return curated only
+      const curated: WorldCupData = {
+        name: "FIFA World Cup 2026",
+        matches: CURATED_MATCHES,
+      };
+      cache.data = curated;
+      cache.fetchedAt = Date.now();
+      return curated;
+    }
   }
+
+  const merged: WorldCupData = {
+    name: "FIFA World Cup 2026",
+    matches: smartMerge(external),
+  };
+
+  cache.data = merged;
+  cache.fetchedAt = Date.now();
+  cache.lastGood = merged;
+  return merged;
 }
 
 
