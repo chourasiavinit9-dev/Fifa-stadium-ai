@@ -75,10 +75,19 @@ export default async function handler(
     );
     clearTimeout(tid);
     if (r.ok) {
-      const d = (await r.json()) as { matches?: unknown[] };
+      const d = (await r.json()) as { matches?: Array<Record<string, unknown>> };
       if (Array.isArray(d.matches) && d.matches.length > 0) {
-        // Merge: curated on top, external fills the rest
-        matches = [...CURATED_MATCHES, ...d.matches];
+        // Deduplicate: curated takes priority, remove external matches that clash
+        const mk = (m: Record<string, unknown>) => {
+          const teams = [
+            String(m.team1 ?? "").toLowerCase().replace(/[^a-z]/g, ""),
+            String(m.team2 ?? "").toLowerCase().replace(/[^a-z]/g, ""),
+          ].sort();
+          return `${m.date}|${teams[0]}|${teams[1]}`;
+        };
+        const curatedKeys = new Set(CURATED_MATCHES.map(mk as (m: unknown) => string));
+        const externalOnly = d.matches.filter((m) => !curatedKeys.has(mk(m)));
+        matches = [...CURATED_MATCHES, ...externalOnly];
       }
     }
   } catch {

@@ -42,6 +42,30 @@ const GATE_INFO = [
   { gate: "B", distance: "0.6 mi", label: "Premium / VIP", note: "Hospitality & suite access" },
 ];
 
+// ── Tournament Stats ────────────────────────────────────────────────────────────
+const TEAM_STATS = [
+  { label: "Goals Scored",     arg: 12, esp: 13 },
+  { label: "Goals Conceded",   arg: 5,  esp: 3  },
+  { label: "Avg Possession %", arg: 56, esp: 63 },
+  { label: "Shots on Target",  arg: 38, esp: 47 },
+  { label: "Pass Accuracy %",  arg: 87, esp: 91 },
+  { label: "Clean Sheets",     arg: 3,  esp: 4  },
+  { label: "Chances Created",  arg: 51, esp: 59 },
+  { label: "Matches Played",   arg: 6,  esp: 6  },
+];
+
+// ── H2H ────────────────────────────────────────────────────────────────────────
+const H2H = { arg: 6, draw: 3, esp: 4, lastMeet: "Argentina 2–1 Spain (Finalissima 2022)", total: 13 };
+
+// ── Critics / Pundits ──────────────────────────────────────────────────────────
+const CRITICS = [
+  { name: "Gary Lineker",   outlet: "BBC Sport",      pick: "Spain",     score: "2–1", reasoning: "Spain's collective football is at its peak. Yamal decides it." },
+  { name: "Thierry Henry",  outlet: "CBS Sports",     pick: "Argentina", score: "1–0", reasoning: "Messi's last dance. Argentina grind out finals. It's destiny." },
+  { name: "Guillem Balagué",outlet: "The Athletic",   pick: "Spain",     score: "2–0", reasoning: "Spain haven't lost a goal in two games. Tactical masterclass incoming." },
+  { name: "Rafa Honigstein",outlet: "Sky Sports",     pick: "Draw/AET",  score: "1–1 AET", reasoning: "Closest possible final. My gut says Messi in 120' to seal it." },
+  { name: "Ian Wright",     outlet: "ITV Sport",      pick: "Argentina", score: "2–1", reasoning: "They've been here before — Paris, Qatar. They know how to close it out." },
+];
+
 // ── Types ──────────────────────────────────────────────────────────────────────
 interface Countdown { days: number; hours: number; minutes: number; seconds: number }
 interface Prediction {
@@ -480,7 +504,127 @@ export default function FinalCountdown() {
           </div>
 
         </div>
+
+        {/* ── Stats Comparison + H2H ──────────────────────────────────────── */}
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+
+          {/* Tournament stats bar chart */}
+          <div style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", borderRadius: 12, padding: 16, flex: 2, minWidth: 260 }}>
+            <div style={{ fontFamily: "monospace", fontSize: 10, color: "#c8ff00", textTransform: "uppercase", letterSpacing: 2, marginBottom: 12 }}>
+              📊 Tournament Stats — Argentina vs Spain
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {TEAM_STATS.map((s) => {
+                const total = s.arg + s.esp;
+                const argPct = Math.round((s.arg / total) * 100);
+                const espPct = 100 - argPct;
+                return (
+                  <div key={s.label}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                      <span style={{ fontFamily: "monospace", fontSize: 11, color: "#6FD3FF", fontWeight: 700 }}>{s.arg}</span>
+                      <span style={{ fontFamily: "monospace", fontSize: 9, color: "#555", textTransform: "uppercase" }}>{s.label}</span>
+                      <span style={{ fontFamily: "monospace", fontSize: 11, color: "#FF6B6B", fontWeight: 700 }}>{s.esp}</span>
+                    </div>
+                    <div style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", background: "#111" }}>
+                      <div style={{ width: `${argPct}%`, background: "linear-gradient(90deg,#3b82f6,#6FD3FF)", borderRadius: "3px 0 0 3px", transition: "width 0.8s ease" }} />
+                      <div style={{ width: `${espPct}%`, background: "linear-gradient(90deg,#FF6B6B,#ef4444)", borderRadius: "0 3px 3px 0", transition: "width 0.8s ease" }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, padding: "6px 0", borderTop: "1px solid #1a1a1a" }}>
+              <span style={{ fontFamily: "monospace", fontSize: 9, color: "#6FD3FF" }}>🇦🇷 ARGENTINA</span>
+              <span style={{ fontFamily: "monospace", fontSize: 9, color: "#FF6B6B" }}>SPAIN 🇪🇸</span>
+            </div>
+          </div>
+
+          {/* H2H */}
+          <div style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", borderRadius: 12, padding: 16, flex: 1, minWidth: 180 }}>
+            <div style={{ fontFamily: "monospace", fontSize: 10, color: "#c8ff00", textTransform: "uppercase", letterSpacing: 2, marginBottom: 12 }}>
+              ⚔️ Head to Head
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, margin: "8px 0 16px" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "monospace", fontSize: 28, fontWeight: 900, color: "#6FD3FF" }}>{H2H.arg}</div>
+                <div style={{ fontFamily: "monospace", fontSize: 9, color: "#555" }}>ARG Wins</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "monospace", fontSize: 20, fontWeight: 900, color: "#444" }}>{H2H.draw}</div>
+                <div style={{ fontFamily: "monospace", fontSize: 9, color: "#555" }}>Draws</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "monospace", fontSize: 28, fontWeight: 900, color: "#FF6B6B" }}>{H2H.esp}</div>
+                <div style={{ fontFamily: "monospace", fontSize: 9, color: "#555" }}>ESP Wins</div>
+              </div>
+            </div>
+            <div style={{ height: 6, display: "flex", borderRadius: 3, overflow: "hidden", marginBottom: 12 }}>
+              <div style={{ width: `${(H2H.arg / H2H.total) * 100}%`, background: "#6FD3FF" }} />
+              <div style={{ width: `${(H2H.draw / H2H.total) * 100}%`, background: "#333" }} />
+              <div style={{ width: `${(H2H.esp / H2H.total) * 100}%`, background: "#FF6B6B" }} />
+            </div>
+            <div style={{ background: "rgba(255,255,255,0.02)", borderRadius: 6, padding: "6px 8px" }}>
+              <div style={{ fontFamily: "monospace", fontSize: 9, color: "#555", marginBottom: 2 }}>LAST MEETING</div>
+              <div style={{ fontSize: 11, color: "#aaa" }}>{H2H.lastMeet}</div>
+            </div>
+            <div style={{ fontFamily: "monospace", fontSize: 9, color: "#444", marginTop: 8, textAlign: "center" }}>{H2H.total} all-time meetings</div>
+          </div>
+        </div>
+
+        {/* ── Expert Critics ──────────────────────────────────────────────── */}
+        <div style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", borderRadius: 12, padding: 16 }}>
+          <div style={{ fontFamily: "monospace", fontSize: 10, color: "#c8ff00", textTransform: "uppercase", letterSpacing: 2, marginBottom: 12 }}>
+            🎙 Expert Predictions — Pundits & Critics
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {CRITICS.map((c) => {
+              const isArg = c.pick === "Argentina";
+              const isEsp = c.pick === "Spain";
+              const color = isArg ? "#6FD3FF" : isEsp ? "#FF6B6B" : "#c8ff00";
+              return (
+                <div
+                  key={c.name}
+                  style={{
+                    background: `rgba(${isArg ? "111,211,255" : isEsp ? "255,107,107" : "200,255,0"},0.05)`,
+                    border: `1px solid rgba(${isArg ? "111,211,255" : isEsp ? "255,107,107" : "200,255,0"},0.15)`,
+                    borderRadius: 10,
+                    padding: "10px 12px",
+                    flex: "1 1 180px",
+                    minWidth: 0,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>{c.name}</div>
+                      <div style={{ fontFamily: "monospace", fontSize: 9, color: "#555" }}>{c.outlet}</div>
+                    </div>
+                    <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 8 }}>
+                      <div style={{ fontFamily: "monospace", fontSize: 11, fontWeight: 900, color, background: `rgba(${isArg ? "111,211,255" : isEsp ? "255,107,107" : "200,255,0"},0.1)`, padding: "2px 6px", borderRadius: 4 }}>{c.pick}</div>
+                      <div style={{ fontFamily: "monospace", fontSize: 10, color: "#888", marginTop: 2 }}>{c.score}</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: 11, color: "#888", lineHeight: 1.4, margin: 0 }}>{c.reasoning}</p>
+                </div>
+              );
+            })}
+          </div>
+          {/* Consensus bar */}
+          <div style={{ marginTop: 12, padding: "10px", background: "rgba(255,255,255,0.02)", borderRadius: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+              <span style={{ fontFamily: "monospace", fontSize: 9, color: "#6FD3FF" }}>🇦🇷 ARG ({CRITICS.filter(c => c.pick === "Argentina").length}/{CRITICS.length} pundits)</span>
+              <span style={{ fontFamily: "monospace", fontSize: 9, color: "#c8ff00" }}>CONSENSUS</span>
+              <span style={{ fontFamily: "monospace", fontSize: 9, color: "#FF6B6B" }}>({CRITICS.filter(c => c.pick === "Spain").length}/{CRITICS.length} pundits) ESP 🇪🇸</span>
+            </div>
+            <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden" }}>
+              <div style={{ width: `${(CRITICS.filter(c => c.pick === "Argentina").length / CRITICS.length) * 100}%`, background: "linear-gradient(90deg,#3b82f6,#6FD3FF)" }} />
+              <div style={{ width: `${(CRITICS.filter(c => c.pick === "Draw/AET").length / CRITICS.length) * 100}%`, background: "#333" }} />
+              <div style={{ width: `${(CRITICS.filter(c => c.pick === "Spain").length / CRITICS.length) * 100}%`, background: "linear-gradient(90deg,#FF6B6B,#ef4444)" }} />
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
 }
+
