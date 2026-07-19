@@ -3,6 +3,30 @@ import React, { useState, useEffect, useRef } from "react";
 // ── Constants ──────────────────────────────────────────────────────────────────
 const FINAL_UTC = new Date("2026-07-19T19:00:00Z");
 
+/** Pads a number to at least 2 digits with a leading zero. e.g. pad(7) => "07" */
+export function pad(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
+/** Computes the countdown from `now` to the World Cup Final kick-off. */
+export function getCountdown(now: Date = new Date()): {
+  started: boolean;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+} {
+  const diff = FINAL_UTC.getTime() - now.getTime();
+  if (diff <= 0) return { started: true, days: 0, hours: 0, minutes: 0, seconds: 0 };
+  return {
+    started: false,
+    days: Math.floor(diff / 86_400_000),
+    hours: Math.floor((diff % 86_400_000) / 3_600_000),
+    minutes: Math.floor((diff % 3_600_000) / 60_000),
+    seconds: Math.floor((diff % 60_000) / 1_000),
+  };
+}
+
 interface PathMatch {
   round: string;
   vs: string;
@@ -79,7 +103,7 @@ interface Prediction {
 // ── Sub-components ─────────────────────────────────────────────────────────────
 /** Displays a single countdown unit (e.g. "07 DAYS"). Memoised — re-renders only when value changes. */
 const CountUnit = React.memo(function CountUnit({ value, label }: { value: number; label: string }) {
-  const str = String(value).padStart(2, "0");
+  const str = pad(value);
   return (
     <div className="flex flex-col items-center">
       <div
@@ -180,17 +204,12 @@ export default function FinalCountdown() {
   // ── Countdown timer ──────────────────────────────────────────────────────────
   useEffect(() => {
     const tick = () => {
-      const diff = FINAL_UTC.getTime() - Date.now();
-      if (diff <= 0) {
+      const cd = getCountdown();
+      if (cd.started) {
         setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
-      setCountdown({
-        days: Math.floor(diff / 86_400_000),
-        hours: Math.floor((diff % 86_400_000) / 3_600_000),
-        minutes: Math.floor((diff % 3_600_000) / 60_000),
-        seconds: Math.floor((diff % 60_000) / 1_000),
-      });
+      setCountdown({ days: cd.days, hours: cd.hours, minutes: cd.minutes, seconds: cd.seconds });
     };
     tick();
     const id = setInterval(tick, 1_000);

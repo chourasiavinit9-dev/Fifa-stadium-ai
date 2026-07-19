@@ -1,0 +1,194 @@
+__tests__/unit/worldCupApi.test.ts(10,8): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+__tests__/unit/worldCupApi.test.ts(11,42): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+server.ts(89,8): error TS1261: Already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' differs from file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/App.tsx(25,35): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/LiveTicker.tsx(4,42): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/LiveTicker.tsx(5,46): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/MatchPrediction.tsx(4,28): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/MatchSchedule.tsx(4,46): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/MatchSchedule.tsx(5,42): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/OrganizerDashboard.tsx(16,35): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/OrganizerDashboard.tsx(22,8): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'
+src/components/OrganizerDashboard.tsx(68,34): error TS2339: Property 'payload' does not exist on type 'CustomTooltipProps'.
+src/components/OrganizerDashboard.tsx(214,25): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(outsideProps: Props<{ name: string; value: number; fill: string; }, any>): ReactElement<unknown, string | JSXElementConstructor<any>>', gave the following error.
+    Type '(props: LabelProps) => React.JSX.Element' is not assignable to type 'PieLabel'.
+      Type '(props: LabelProps) => React.JSX.Element' is not assignable to type '(props: PieLabelRenderProps) => ReactNode | ReactElement<SVGElement, string | JSXElementConstructor<any>>'.
+        Types of parameters 'props' and 'props' are incompatible.
+          Type 'PieLabelRenderProps' is not assignable to type 'LabelProps'.
+            Property 'midAngle' is optional in type 'PieLabelRenderProps' but required in type 'LabelProps'.
+  Overload 2 of 2, '(outsideProps: Props<any, any>): ReactElement<unknown, string | JSXElementConstructor<any>>', gave the following error.
+    Type '(props: LabelProps) => React.JSX.Element' is not assignable to type 'PieLabel'.
+      Type '(props: LabelProps) => React.JSX.Element' is not assignable to type '(props: PieLabelRenderProps) => ReactNode | ReactElement<SVGElement, string | JSXElementConstructor<any>>'.
+        Types of parameters 'props' and 'props' are incompatible.
+          Type 'PieLabelRenderProps' is not assignable to type 'LabelProps'.
+            Property 'midAngle' is optional in type 'PieLabelRenderProps' but required in type 'LabelProps'.
+src/lib/gemini.ts(3,28): error TS1149: File name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldCupApi.ts' differs from already included file name '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/worldcupApi.ts' only in casing.
+  The file is in the program because:
+    Imported via "./src/lib/worldcupApi.js" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/server.ts'
+    Imported via "./worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/lib/gemini.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../../src/lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/__tests__/unit/worldCupApi.test.ts'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/LiveTicker.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchSchedule.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/MatchPrediction.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "../lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/components/OrganizerDashboard.tsx'
+    Imported via "./lib/worldCupApi" from file '/Users/vinitchaurasia/Downloads/fifaiq-stadium-control-tower/src/App.tsx'
+    Matched by default include pattern '**/*'

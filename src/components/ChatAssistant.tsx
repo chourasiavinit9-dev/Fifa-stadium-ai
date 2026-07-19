@@ -24,6 +24,7 @@ const GREETING: ChatMessage = {
 const QUICK_CHIPS = [
   "Today's scores 📊",
   "Least crowded gate 🚪",
+  "Where is Gate A? 🗺️",
   "Semi-final schedule 📅",
   "Top goalscorers ⚽",
   "Nearest food court 🍔",

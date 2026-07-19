@@ -326,8 +326,10 @@ function teamPairKey(t1: string, t2: string): string {
  *  2. **Knockouts with a curated score**: always use curated — our data is authoritative.
  *  3. **Knockouts without a curated score** (e.g. Final pre-result): auto-fill from CDN
  *     so the winner appears automatically once the CDN updates post-match.
+ *
+ * @internal Exported for unit testing only.
  */
-function smartMerge(external: Match[]): Match[] {
+export function smartMerge(external: Match[]): Match[] {
   const groupStage = external.filter((m) => m.date < KNOCKOUT_CUTOFF_DATE);
   const externalKnockouts = external.filter((m) => m.date >= KNOCKOUT_CUTOFF_DATE);
 
