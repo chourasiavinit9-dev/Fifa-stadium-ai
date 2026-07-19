@@ -77,17 +77,15 @@ export default async function handler(
     if (r.ok) {
       const d = (await r.json()) as { matches?: Array<Record<string, unknown>> };
       if (Array.isArray(d.matches) && d.matches.length > 0) {
-        // Deduplicate: curated takes priority, remove external matches that clash
-        const mk = (m: Record<string, unknown>) => {
-          const teams = [
-            String(m.team1 ?? "").toLowerCase().replace(/[^a-z]/g, ""),
-            String(m.team2 ?? "").toLowerCase().replace(/[^a-z]/g, ""),
-          ].sort();
-          return `${m.date}|${teams[0]}|${teams[1]}`;
-        };
-        const curatedKeys = new Set(CURATED_MATCHES.map(mk as (m: unknown) => string));
-        const externalOnly = d.matches.filter((m) => !curatedKeys.has(mk(m)));
-        matches = [...CURATED_MATCHES, ...externalOnly];
+        // Only accept external GROUP STAGE matches (before July 4).
+        // ALL knockout rounds (R16, QF, SF, 3rd place, Final) are curated
+        // and authoritative — external CDN mock data must not override them.
+        const KNOCKOUT_CUTOFF = "2026-07-04";
+        const groupStageOnly = d.matches.filter((m) => {
+          const date = String(m.date ?? "");
+          return date < KNOCKOUT_CUTOFF;
+        });
+        matches = [...CURATED_MATCHES, ...groupStageOnly];
       }
     }
   } catch {

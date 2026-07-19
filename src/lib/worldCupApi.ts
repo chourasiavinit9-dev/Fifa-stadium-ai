@@ -294,25 +294,19 @@ function matchKey(m: Match): string {
 
 /**
  * Merge curated matches on top of external data.
- * Curated entries take priority — external data fills anything not in the curated list.
+ * Only group-stage external matches (before July 4) are accepted.
+ * All knockout rounds are exclusively from curated data.
  */
 function mergeCurated(external: Match[]): Match[] {
-  const curatedKeys = new Set(CURATED_MATCHES.map(matchKey));
-  const curatedDates = new Set(CURATED_MATCHES.map((m) => m.date));
+  // Only accept external group stage matches — knockouts are all curated
+  const KNOCKOUT_CUTOFF = "2026-07-04";
+  const groupStageOnly = external.filter((m) => m.date < KNOCKOUT_CUTOFF);
 
-  // Filter out any external match that matches exact date+teams, OR any external knockout match on the exact same date as a curated knockout match
-  const externalOnly = external.filter((m) => {
-    if (curatedKeys.has(matchKey(m))) return false;
-    // Also if it's a knockout match on the same date as our curated knockout match, prefer curated
-    const isKnockout = /Round of 32|Round of 16|Quarter|Semi|third place|Final/i.test(m.round);
-    if (isKnockout && curatedDates.has(m.date)) return false;
-    return true;
-  });
-
-  return [...CURATED_MATCHES, ...externalOnly].sort((a, b) =>
+  return [...CURATED_MATCHES, ...groupStageOnly].sort((a, b) =>
     a.date.localeCompare(b.date)
   );
 }
+
 
 // Authoritative fallback = curated data only
 const HARDCODED_FALLBACK: WorldCupData = {
