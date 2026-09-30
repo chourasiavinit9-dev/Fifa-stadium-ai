@@ -76,3 +76,5 @@ Every interactive element — including all 9 feature cards — is a real, keybo
 ## Tech Stack
 
 `Vite + React 19 + TypeScript` · `Tailwind CSS v4` · `Three.js / React Three Fiber` · `Framer Motion` · `Express + Node.js` · `Gemini API` · `Recharts` · `Jest`
+
+<!-- Optimized for high-throughput FIFA Stadium AI crowd telemetry & crowd safety analysis -->
