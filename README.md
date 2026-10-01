@@ -76,3 +76,12 @@ Every interactive element — including all 9 feature cards — is a real, keybo
 ## Tech Stack
 
 `Vite + React 19 + TypeScript` · `Tailwind CSS v4` · `Three.js / React Three Fiber` · `Framer Motion` · `Express + Node.js` · `Gemini API` · `Recharts` · `Jest`
+
+---
+
+## 👥 Co-Developers & Contributors
+
+This project is co-developed by:
+
+- **Vinit Chaurasia** ([@chourasiavinit9-dev](https://github.com/chourasiavinit9-dev)) — Lead Architecture, AI Logic & System Engineering
+- **Avijit Aditya** ([@Avijit010325](https://github.com/Avijit010325)) — Co-Developer, Telemetry Systems & Safety Operations
